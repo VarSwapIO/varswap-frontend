@@ -13,7 +13,7 @@ import React, { ReactElement } from 'react'
 const UserAuthHeader = () => {
   const router = useRouter();
   const { colorScheme } = useMantineColorScheme();
-  const { accountConnected, onDisconnect } = useConnectWallet()
+  const { accountConnected, onDisconnect, balance } = useConnectWallet()
 
   const renderListTabs = () => {
     return (
@@ -65,25 +65,21 @@ const UserAuthHeader = () => {
                 )}
               </CopyButton>
             </div>
-            {/* {
-              balances?.map((b: BALANCE_ACCOUNT) => (
-                <div key={b?.coin_type} className='flex items-center justify-between px-4 py-2 mx-2 mt-2 rounded-md bg-slate-100/80 dark:bg-slate-700/80'>
-                  <div className='w-fit flex gap-2 items-center justify-center' >
-                    <ImageBG
-                      alt="logo-token"
-                      width={20}
-                      height={20}
-                      src={b?.icon || ''}
-                      className="dark:border-slate-700 border-slate-200 border rounded-full min-h-[20px] object-cover"
-                    />
-                    <p className='font-bold dark:text-white text-slate-900 text-sm'>{b?.symbol}</p>
-                  </div>
-                  <p className='font-bold dark:text-white text-slate-900 text-sm'>
-                    {formatPriceTokenDisplay(BigNumber.parseNumberToOriginal((b?.amount || 0), b?.decimals), true)}
-                  </p>
-                </div>
-              ))
-            } */}
+            <div className='flex items-center justify-between px-4 py-2 mx-2 mt-2 rounded-md bg-slate-100/80 dark:bg-slate-700/80'>
+              <div className='w-fit flex gap-2 items-center justify-center' >
+                <ImageBG
+                  alt="logo-token"
+                  width={20}
+                  height={20}
+                  src={'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png'}
+                  className="dark:border-slate-700 border-slate-200 border rounded-full min-h-[20px] object-cover"
+                />
+                <p className='font-bold dark:text-white text-slate-900 text-sm'>{balance.unit}</p>
+              </div>
+              <p className='font-bold dark:text-white text-slate-900 text-sm'>
+                {balance.value}
+              </p>
+            </div>
           </div>
         </div>
         <Divider size={'xs'} className='dark:border-t-slate-700 border-t-slate-100' />

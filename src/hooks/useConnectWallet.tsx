@@ -2,7 +2,7 @@ import { getCachedData, removeCacheData, setCacheData } from '@/helpers/storage'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import _ from 'lodash'
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { useBalance } from '@gear-js/react-hooks';
+import { useBalance, useBalanceFormat } from '@gear-js/react-hooks';
 
 export interface ACCOUNT_CONNECTED extends InjectedAccountWithMeta {
   walletInfo: WALLET_METADATA
@@ -12,11 +12,11 @@ type ConnectWalletContextProps = {
   connected: boolean;
   accountConnected?: ACCOUNT_CONNECTED;
   openModalConnectWallet: boolean;
-  balances: BALANCE_ACCOUNT[];
+  balance: { value: string | number, unit: string };
   onChangeStateModalConnect: (status: boolean) => void;
   onAccountConnect: (data: ACCOUNT_CONNECTED) => void;
   onDisconnect: () => void;
-  getBalances: () => void;
+  // getBalances: () => void;
 }
 
 
@@ -25,11 +25,11 @@ const ConnectWalletContext = createContext<ConnectWalletContextProps>({
   connected: false,
   accountConnected: undefined,
   openModalConnectWallet: false,
-  balances: [],
+  balance: { value: 0, unit: "VARA" },
   onChangeStateModalConnect: () => { },
   onAccountConnect: () => { },
   onDisconnect: () => { },
-  getBalances: () => { }
+  // getBalances: () => { }
 })
 
 export const useConnectWallet = () => useContext(ConnectWalletContext)
@@ -43,23 +43,14 @@ export default function ConnectWalletProvider({
   const [openModalConnectWallet, setOpenModalConnectWallet] = useState(false);
   const [connected, setConnected] = useState(false);
   const [accountConnected, setAccountConnected] = useState<ACCOUNT_CONNECTED>();
-  const [balances, setBalances] = useState<BALANCE_ACCOUNT[]>([])
-  const { balance } = useBalance('kGgEHnaoYWzVQ7iYBJYkubetSfJcUDfvUT7vijkXh4PsJipmC');
+  // const [balances, setBalances] = useState<BALANCE_ACCOUNT[]>([])
+  const { balance } = useBalance(accountConnected?.address);
+  const { getFormattedBalance, decimals } = useBalanceFormat();
+  const formattedBalance = balance ? getFormattedBalance(balance) : { value: 0, unit: 'VARA' };
 
   useEffect(() => {
     getDataWalletCached()
   }, [])
-
-  useEffect(() => {
-    if (!!connected) {
-      getBalances()
-    }
-  }, [connected, accountConnected])
-
-  const getBalances = async () => {
-    // todo
-    console.log('balance :>> ', balance);
-  }
 
   const getDataWalletCached = async () => {
     const account_cached = await getCachedData('account');
@@ -94,7 +85,7 @@ export default function ConnectWalletProvider({
   const onDisconnect = () => {
     setAccountConnected(undefined);
     setConnected(false);
-    setBalances([])
+    // setBalances([])
 
     // remove cache
     removeCacheData('account')
@@ -104,17 +95,17 @@ export default function ConnectWalletProvider({
       connected,
       accountConnected,
       openModalConnectWallet,
-      balances,
+      balance: formattedBalance,
       onChangeStateModalConnect,
       onAccountConnect,
       onDisconnect,
-      getBalances
+      // getBalances
     }),
     [
       connected,
       accountConnected,
       openModalConnectWallet,
-      balances
+      formattedBalance
     ]
   )
 

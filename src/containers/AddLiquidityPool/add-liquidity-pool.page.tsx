@@ -6,11 +6,15 @@ import SkeletonBG from '@/components/SkeletonBG'
 import { MAIN_COLOR } from '@/config/asset'
 import { BigNumber } from '@/helpers/big_number_cal'
 import { formatNumberDisplay } from '@/helpers/format_number_display'
+import { useConnectWallet } from '@/hooks/useConnectWallet'
 import { YOUR_LIQUIDITY_MOCKDATA } from '@/mockData'
 import { Button, Loader, LoadingOverlay } from '@mantine/core'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 const AddLiquidityPoolContainer = () => {
+  const router = useRouter()
+  const { connected } = useConnectWallet()
   const [slippageTolerance, setSlippageTolerance] = useState<number>(0.1);
   const [loadingPool, setLoadingPool] = useState<boolean>(false);
 
@@ -24,12 +28,11 @@ const AddLiquidityPoolContainer = () => {
 
   const loadingLiquidityInstead = false;
   const loadingOutput = false;
-  const connected = true;
   return (
     <div className='relative py-16 container mx-auto px-2 min-h-[90vh]'>
       {loadingLiquidityInstead ? <div className='w-full max-w-lg m-auto bg-white dark:bg-slate-900 border dark:border-slate-800 border-slate-100 rounded-3xl shadow-lg p-4'>
         <div className='flex justify-between items-center dark:text-white text-slate-900'>
-          <div onClick={() => { }} className='bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-full cursor-pointer'>
+          <div onClick={() => router.back()} className='bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 p-2 rounded-full cursor-pointer'>
             <svg xmlns="http://www.w3.org/2000/svg" className='w-5 h-5' viewBox="0 0 24 24"><path fill="currentColor" d="M21 11H6.83l3.58-3.59L9 6l-6 6l6 6l1.41-1.41L6.83 13H21z"></path></svg>
           </div>
           <p className='text-lg font-semibold'> Add Liquidity</p>
@@ -44,7 +47,7 @@ const AddLiquidityPoolContainer = () => {
       </div> :
         <div className='relative w-full max-w-lg m-auto bg-white dark:bg-slate-900 border dark:border-slate-800 border-slate-100 rounded-3xl shadow-lg p-4'>
           <div className='flex justify-between items-center dark:text-white text-slate-900'>
-            <div onClick={() => { }} className='bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-700 p-2 rounded-full cursor-pointer'>
+            <div onClick={() => router.back()} className='bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-700 p-2 rounded-full cursor-pointer'>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                 <path fillRule="evenodd" d="M11.03 3.97a.75.75 0 010 1.06l-6.22 6.22H21a.75.75 0 010 1.5H4.81l6.22 6.22a.75.75 0 11-1.06 1.06l-7.5-7.5a.75.75 0 010-1.06l7.5-7.5a.75.75 0 011.06 0z" clipRule="evenodd" />
               </svg>

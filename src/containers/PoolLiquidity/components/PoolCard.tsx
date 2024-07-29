@@ -3,6 +3,7 @@ import { formatNumberDisplay } from '@/helpers/format_number_display'
 import { YOUR_LIQUIDITY_MOCKDATA } from '@/mockData'
 import { Button, Collapse } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import Link from 'next/link'
 import React from 'react'
 
 const PoolCard = () => {
@@ -74,8 +75,21 @@ const PoolCard = () => {
           </div>
         </div>
         <div className='my-6 flex justify-center gap-4'>
-          <Button  className='rounded-full bg-mainColor hover:bg-mainColor/80'>Add liquidity instead</Button>
-          <Button className='rounded-full' color={'red'} >Remove</Button>
+          <Button
+            className='rounded-full bg-mainColor hover:bg-mainColor/80'
+            href={'/pool/add'}
+            component={Link}
+          >
+            Add liquidity instead
+          </Button>
+          <Button
+            className='rounded-full'
+            color={'red'}
+            href={'/pool/create'}
+            component={Link}
+          >
+            Remove
+          </Button>
         </div>
       </Collapse>
 

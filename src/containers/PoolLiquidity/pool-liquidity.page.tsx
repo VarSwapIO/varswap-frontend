@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 import PoolCard from './components/PoolCard'
 
 const PoolLiquidityContainer = () => {
-  const [yourLiquidity, setYourLiquidity] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+  const [yourLiquidity, setYourLiquidity] = useState([1])
   return (
     <div className='relative py-16 container max-w-screen-md mx-auto px-2 min-h-[90vh]'>
       <div className='flex justify-between items-center'>

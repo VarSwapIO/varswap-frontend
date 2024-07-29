@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { formatNumberDisplay } from '@/helpers/format_number_display'
 import ImageBG from '@/components/Image/ImageBG';
+import Link from 'next/link';
 
 const HomepageContainer = () => {
 
@@ -30,7 +31,7 @@ const HomepageContainer = () => {
               </p>
               <div className='flex gap-4 items-center my-8 md:my-4 mx-auto md:mx-0 text-sm md:text-base'>
                 <button className="z-10 mx-auto md:mx-0 bg-white text-gray-700 font-bold rounded-full py-3 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-                  <a href="/swap/0x2::sui::SUI/0xd9f9b0b4f35276eecd1eea6985bfabe2a2bbd5575f9adb9162ccbdb4ddebde7f::smove::SMOVE">Get Started</a>
+                  <Link href="/swap">Get Started</Link>
                 </button>
                 <button onClick={() => handleClickScroll()} className="flex gap-2 items-center z-10 mx-auto md:mx-0 bg-gradient-to-br from-mainColor to-mainColor/60 hover:bg-gradient-to-bl text-gray-100 font-bold rounded-full py-3 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
                   Learn More
@@ -97,7 +98,7 @@ const HomepageContainer = () => {
                       <p className='dark:text-slate-300 text-sm font-medium'>${formatNumberDisplay(+(+dataCurrentDay?.volume_24h_usd * 0.003)?.toFixed(2) || 0)}</p>
                     </div>
                   </div>
-                  <a className="text-blue-500 font-medium" href="/swap/0x2::sui::SUI/0xd9f9b0b4f35276eecd1eea6985bfabe2a2bbd5575f9adb9162ccbdb4ddebde7f::smove::SMOVE">Trade Tokens</a>
+                  <Link className="text-blue-500 font-medium" href="/swap">Trade Tokens</Link>
                 </div>
                 {/* <img src={swapCoin} alt='swap-coin' className='h-full object-cover absolute inset-y-0 right-0' /> */}
               </div>
@@ -128,7 +129,12 @@ const HomepageContainer = () => {
                         <p className='dark:text-slate-300 font-medium text-sm'>$1500</p>
                       </div>
                     </div>
-                    <a className="text-blue-500 font-medium" href="https://sui.bluemove.net/explore" target="_blank" rel="noopener noreferrer" >Farm now</a>
+                    <Link
+                      className="text-blue-500 font-medium"
+                      href="/farms"
+                    >
+                      Farm now
+                    </Link>
                   </div>
                 </div>
                 {/* <img src={bannerNFTMarketplace} className='h-full object-cover absolute inset-y-0 right-0 w-1/3 sm:w-1/2' alt='swap-coin' /> */}
@@ -147,7 +153,7 @@ const HomepageContainer = () => {
               <div className='flex gap-4 items-center'>
                 <div className='border border-solid border-slate-200 rounded-xl bg-slate-50 shadow-sm p-1'>
                   <ImageBG
-                    src={'/images/features/download-qrcode.png'}
+                    src={'/images/features/VarSwap_qrcode.svg'}
                     alt="qr"
                     width={150}
                     height={150}
@@ -208,9 +214,9 @@ const HomepageContainer = () => {
                 <p className="text-sm sm:text-base px-6 mb-5 mt-3 lg:min-h-[90px] font-medium dark:text-slate-300 text-slate-600">
                   Buy crypto with your credit card or bank account at the best rates.
                 </p>
-                <a href="/swap/0x2::sui::SUI/0xd9f9b0b4f35276eecd1eea6985bfabe2a2bbd5575f9adb9162ccbdb4ddebde7f::smove::SMOVE" className="text-base text-blue-500 px-6 mb-5 mt-3 font-semibold">
+                <Link href="/swap" className="text-base text-blue-500 px-6 mb-5 mt-3 font-semibold">
                   Buy Now
-                </a>
+                </Link>
               </div>
               <div className="w-full p-6 bg-gradient-custom dark:bg-gradient-custom-dark rounded-3xl shadow-md">
                 <div className='flex justify-between items-center'>
@@ -234,7 +240,7 @@ const HomepageContainer = () => {
                     Staking
                   </p>
                   <p className='w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-mainColor flex justify-center items-center'>
-                  <svg xmlns="http://www.w3.org/2000/svg" className='w-6 h-6 sm:w-9 sm:h-9 text-white' viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M8 6c3.314 0 6-.895 6-2s-2.686-2-6-2s-6 .895-6 2s2.686 2 6 2m7.5 3a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13"></path><path d="M15.5 19c.105 0 .202-.05.397-.148l1.564-.796c.693-.352 1.039-.527 1.039-.806v-3.5m-3 5.25c-.105 0-.202-.05-.397-.148l-1.564-.796c-.693-.352-1.039-.527-1.039-.806v-3.5m3 5.25v-3.5m3-1.75c0-.279-.346-.454-1.039-.806l-1.564-.796c-.195-.098-.292-.148-.397-.148s-.202.05-.397.148l-1.564.796c-.693.351-1.039.527-1.039.806m6 0c0 .279-.346.454-1.039.806l-1.564.796c-.195.098-.292.148-.397.148m-3-1.75c0 .279.346.454 1.039.806l1.564.796c.195.098.292.148.397.148M2 4v8.043c0 .704 1.178 1.59 4.13 1.957M2.107 8.548C3.312 9.61 5.46 10.06 7.754 10.06m6.234-5.939v2.015"></path></g></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" className='w-6 h-6 sm:w-9 sm:h-9 text-white' viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" color="currentColor"><path d="M8 6c3.314 0 6-.895 6-2s-2.686-2-6-2s-6 .895-6 2s2.686 2 6 2m7.5 3a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13"></path><path d="M15.5 19c.105 0 .202-.05.397-.148l1.564-.796c.693-.352 1.039-.527 1.039-.806v-3.5m-3 5.25c-.105 0-.202-.05-.397-.148l-1.564-.796c-.693-.352-1.039-.527-1.039-.806v-3.5m3 5.25v-3.5m3-1.75c0-.279-.346-.454-1.039-.806l-1.564-.796c-.195-.098-.292-.148-.397-.148s-.202.05-.397.148l-1.564.796c-.693.351-1.039.527-1.039.806m6 0c0 .279-.346.454-1.039.806l-1.564.796c-.195.098-.292.148-.397.148m-3-1.75c0 .279.346.454 1.039.806l1.564.796c.195.098.292.148.397.148M2 4v8.043c0 .704 1.178 1.59 4.13 1.957M2.107 8.548C3.312 9.61 5.46 10.06 7.754 10.06m6.234-5.939v2.015"></path></g></svg>
                   </p>
                 </div>
                 <p className="text-sm sm:text-base px-6 mb-5 mt-3 lg:min-h-[90px]">
