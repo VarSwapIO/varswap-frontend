@@ -1,0 +1,13 @@
+# stages:
+#   - deploy
+
+# deploy-develop-server:
+#   # Use the official docker image.
+#   image: ictu/sshpass
+#   stage: deploy
+#   script:
+#     - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USER@$SERVER_IP
+#       "source ~/.nvm/nvm.sh && nvm use 18 && cd /home/ubuntu/Work/Pramb/pramb-fe && git add . && git reset --hard && git pull && yarn && yarn build && pm2 start pramb-fe && sudo service nginx restart"
+#   only:
+#     - develop
+# #   when: manual
