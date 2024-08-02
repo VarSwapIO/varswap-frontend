@@ -59,3 +59,13 @@ type WALLET_METADATA = {
   icon: string;
   url: string;
 }
+
+type COIN_METADATA = {
+  name: string;
+  symbol: string;
+  address: string;
+  icon: string;
+  verified: boolean;
+  price_usd: string | number;
+  old_24h_price_usd: string | number;
+}
