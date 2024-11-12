@@ -1,15 +1,17 @@
 'use client'
 import SkeletonBG from '@/components/SkeletonBG';
+import { MAIN_COLOR } from '@/config/asset';
 import { formatNumberDisplay, formatPriceTokenDisplay } from '@/helpers/format_number_display';
 import { TOKEN_LIST } from '@/mockData';
-import { Tooltip } from '@mantine/core';
+import { Button, Tooltip } from '@mantine/core';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import SwapComponent from '../Swap/components/SwapComponent';
 import ChartTokenDetail from './components/ChartTokenDetails';
 
 const TokenDetails = () => {
+  const params = useParams();
+  const address = decodeURIComponent(params?.token_address?.toString() || '');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [tokenData, setTokenData] = useState(TOKEN_LIST[0])
@@ -64,8 +66,18 @@ const TokenDetails = () => {
         </div>
         <div className='relative gap-2'>
           <ChartTokenDetail data={[]} loading={loading} />
-          <div className='absolute right-0 top-0 w-2/5 pl-10 hidden md:block'>
-            <SwapComponent />
+          <div className='absolute right-0 top-0 w-1/5 pl-10 hidden md:block'>
+            <Button
+              component='a'
+              href={`/swap/${address}` || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant={'light'}
+              className="w-full text-center rounded-full"
+              color={MAIN_COLOR}
+            >
+              Trade Now
+            </Button>
           </div>
         </div>
       </div>
@@ -96,7 +108,7 @@ const TokenDetails = () => {
           </div>
         </div>
       </div>
-     
+
       {/* Address */}
       <div className='mt-6'>
         <div className='flex justify-between items-center'>

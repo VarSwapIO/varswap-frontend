@@ -1,7 +1,7 @@
 import ButtonConnectWallet from '@/components/Button/ButtonConnectWallet'
 import ImageBG from '@/components/Image/ImageBG'
 import BlankLink from '@/components/Link/BlankLink'
-import { useConnectWallet } from '@/hooks/useConnectWallet'
+import { useConnectWallet } from '@/context/useConnectWallet'
 import { NAVIGATIONS } from '@/layout/navigation'
 import { Burger, Button, Divider, Drawer, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'

@@ -5,13 +5,14 @@ import CoinLine from './CoinLine'
 
 const coins_default: COIN_METADATA[] = [
   {
-    name: 'Vara Network',
-    symbol: "VARA",
+    name: 'Vara Network Testnet',
+    symbol: "TVARA",
     icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
-    address: '0x0',
+    address: 'NATIVE',
     verified: true,
-    price_usd: 1.54,
-    old_24h_price_usd: 1.32,
+    decimals:12,
+    price_usd: '--',
+    old_24h_price_usd: 0,
   },
   {
     name: 'Tether USD ',
@@ -19,8 +20,9 @@ const coins_default: COIN_METADATA[] = [
     icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
     address: '0x0::usdt',
     verified: true,
-    price_usd: 1.00,
-    old_24h_price_usd: 1.00,
+    price_usd: '--',
+    decimals:12,
+    old_24h_price_usd: 0,
   },
 ]
 const HeaderSearch = () => {

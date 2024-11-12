@@ -26,7 +26,7 @@ const ChartTokenDetail = ({ data, loading }: LineChartProps) => {
     const change_price = percentBetweenTwoValue(data?.[0]?.value, dataHover?.value || data_current_day?.value)
     console.log('data_chart_tvl', data)
     if (!data || data.length === 0 || loading) {
-        return <div className='w-full md:w-3/5 h-full overflow-hidden relative'>
+        return <div className='w-full md:w-4/5 h-full overflow-hidden relative'>
             <div>
                 <p className='mt-1'><SkeletonBG width={200} height={30} /></p>
                 <p className='mt-1'><SkeletonBG width={150} height={15} /></p>
@@ -35,7 +35,7 @@ const ChartTokenDetail = ({ data, loading }: LineChartProps) => {
         </div>
     }
     return (
-        <div className='w-full md:w-3/5 h-full overflow-hidden relative'>
+        <div className='w-full md:w-4/5 h-full overflow-hidden relative'>
             <div className=''>
                 <p className='text-4xl font-semibold dark:text-txtdark-300 mt-1'>${formatNumberDisplay((dataHover?.value || data_current_day?.value)?.toFixed(Math.floor(3 + getBaseLog(10, 1 / ((dataHover?.value || data_current_day?.value))))) || 0)}</p>
                 <div className='flex gap-2 items-center'>

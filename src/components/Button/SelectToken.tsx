@@ -4,8 +4,8 @@ import ImageBG from '../Image/ImageBG';
 import ModalTokenSelect from '../Modal/ModalTokenSelect';
 
 interface InputSelectToken {
-  onChangeToken?: (token: TOKEN_METADATA) => void;
-  token?: TOKEN_METADATA;
+  onChangeToken?: (token: COIN_METADATA) => void;
+  token?: COIN_METADATA;
   disable?: boolean;
   disableSelectToken?: boolean;
 }
@@ -17,7 +17,7 @@ const SelectToken = ({ onChangeToken, token, disableSelectToken }: InputSelectTo
       {token?.name ? (
         <div
           onClick={() => !disableSelectToken && setModalSelectToken(true)}
-          className={'cursor-pointer shadow-md flex justify-center gap-2 items-center font-semibold rounded-full w-fit p-1 py-2 text-center text-sm min-w-[120px] text-black dark:text-white dark:bg-slate-800 bg-white dark:hover:bg-slate-900 hover:bg-slate-200'}>
+          className={'cursor-pointer shadow-md flex justify-center gap-2 items-center font-semibold rounded-full w-fit p-1 py-2 text-center text-sm min-w-[150px] text-black dark:text-white dark:bg-slate-800 bg-white dark:hover:bg-slate-900 hover:bg-slate-200'}>
           <ImageBG
             className="!w-6 !h-6 rounded-full bg-white object-cover"
             src={token.icon}

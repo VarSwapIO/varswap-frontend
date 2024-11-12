@@ -1,10 +1,10 @@
 import SwapContainer from '@/containers/Swap/swap.page'
 import React from 'react'
 
-const SwapTokenPairPage = () => {
+const SuiSwapPage = () => {
   return (
     <SwapContainer />
   )
 }
 
-export default SwapTokenPairPage
+export default SuiSwapPage

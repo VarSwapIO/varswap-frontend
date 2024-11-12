@@ -1,19 +1,16 @@
 import ImageBG from '@/components/Image/ImageBG';
 import { MAIN_COLOR } from '@/config/asset';
-import { WALLET_LIST } from '@/config/wallet';
+import { BigNumber } from '@/helpers/big_number_cal';
+import { formatNumberDisplay } from '@/helpers/format_number_display';
 import { shortString } from '@/helpers/utils';
-import { useConnectWallet } from '@/hooks/useConnectWallet';
-import { ActionIcon, Button, Chip, CopyButton, Divider, Drawer, Menu, rem, Tooltip, useMantineColorScheme } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks';
+import { useConnectWallet } from '@/context/useConnectWallet';
+import { ActionIcon, Button, CopyButton, Divider, Menu, rem, Tooltip } from '@mantine/core'
 import { IconCheck, IconCopy } from '@tabler/icons-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { ReactElement } from 'react'
-
+import React from 'react'
+import { decodeAddress } from '@gear-js/api'
 const UserAuthHeader = () => {
-  const router = useRouter();
-  const { colorScheme } = useMantineColorScheme();
-  const { accountConnected, onDisconnect, balance } = useConnectWallet()
+  const { accountConnected, onDisconnect, balances } = useConnectWallet();
+  const vara_balance = balances?.['NATIVE']
 
   const renderListTabs = () => {
     return (
@@ -43,8 +40,8 @@ const UserAuthHeader = () => {
           </div>
           <div className='py-4 bg-white dark:bg-slate-900/80 mb-4 mx-2 mt-2 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm'>
             <div className='flex gap-1.5 items-center justify-center pl-2'>
-              <p className='dark:text-white text-slate-900 font-semibold '>{shortString(accountConnected?.address || '', 8, 8)}</p>
-              <CopyButton value={accountConnected?.address || ''} timeout={2000}>
+              <p className='dark:text-white text-slate-900 font-semibold '>{shortString(decodeAddress(accountConnected?.address as any) || '', 8, 8)}</p>
+              <CopyButton value={decodeAddress(accountConnected?.address as any) || ''} timeout={2000}>
                 {({ copied, copy }) => (
                   <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="right">
                     <ActionIcon
@@ -74,10 +71,10 @@ const UserAuthHeader = () => {
                   src={'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png'}
                   className="dark:border-slate-700 border-slate-200 border rounded-full min-h-[20px] object-cover"
                 />
-                <p className='font-bold dark:text-white text-slate-900 text-sm'>{balance.unit}</p>
+                <p className='font-bold dark:text-white text-slate-900 text-sm'>{vara_balance?.symbol}</p>
               </div>
               <p className='font-bold dark:text-white text-slate-900 text-sm'>
-                {balance.value}
+                {formatNumberDisplay(BigNumber.parseNumberToOriginal(vara_balance?.amount || 0, vara_balance?.decimals))}
               </p>
             </div>
           </div>
@@ -121,7 +118,7 @@ const UserAuthHeader = () => {
                 />
               }
             >
-              <p className='line-clamp-1 max-w-[100px] whitespace-normal'>{accountConnected?.meta.name}</p>
+              <p className='line-clamp-1 max-w-[100px] whitespace-normal'>{shortString(decodeAddress(accountConnected?.address as any) as string, 5, 4) || accountConnected?.meta.name}</p>
             </Button>
           </Menu.Target >
           <Menu.Dropdown top={48} w={'280px'} className="border-none bg-white p-0 dark:bg-slate-800 rounded-xl">

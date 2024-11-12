@@ -24,7 +24,7 @@ type MODAL_TYPE = {
   opened: boolean;
   close: () => void;
 }
-
+type CHAIN_NAME_TYPE = 'VARA'
 type TOKEN_METADATA = {
   name: string;
   symbol: string;
@@ -65,7 +65,8 @@ type COIN_METADATA = {
   symbol: string;
   address: string;
   icon: string;
-  verified: boolean;
-  price_usd: string | number;
-  old_24h_price_usd: string | number;
+  decimals: number;
+  verified?: boolean;
+  price_usd?: string | number;
+  old_24h_price_usd?: string | number;
 }

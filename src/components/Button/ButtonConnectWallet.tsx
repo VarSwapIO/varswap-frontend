@@ -1,4 +1,4 @@
-import { useConnectWallet } from '@/hooks/useConnectWallet'
+import { useConnectWallet } from '@/context/useConnectWallet'
 import { Button, ButtonProps } from '@mantine/core'
 import React from 'react'
 

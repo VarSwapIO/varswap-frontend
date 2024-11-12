@@ -1,5 +1,5 @@
 'use client';
-import ConnectWalletProvider from '@/hooks/useConnectWallet';
+import ConnectWalletProvider from '@/context/useConnectWallet';
 import { VaraAccountProvider, VaraAlertProvider, VaraAPIProvider } from '@/libraries/vara-gear';
 import { Container, useMantineColorScheme } from '@mantine/core'
 import dynamic from 'next/dynamic';
@@ -18,8 +18,8 @@ const LayoutTemplate = ({ children }: { children: any }) => {
 
   return (
     <VaraAccountProvider >
-      <VaraAPIProvider initialArgs={{ endpoint: 'wss://testnet.vara.network' }}>
-        <VaraAlertProvider>
+      <VaraAPIProvider initialArgs={{ endpoint: 'wss://testnet-archive.vara.network' }}>
+        <VaraAlertProvider >
           <ConnectWalletProvider>
             <div className='relative'>
               <div className='w-screen h-screen fixed inset-0 transform-none dark:hidden bg-gradient-custom '></div>

@@ -2,11 +2,12 @@
 import ImageBG from '@/components/Image/ImageBG';
 import { MAIN_COLOR } from '@/config/asset';
 import { WALLET_LIST } from '@/config/wallet';
-import { useConnectWallet } from '@/hooks/useConnectWallet';
+import { useConnectWallet } from '@/context/useConnectWallet';
+import { decodeAddress } from '@gear-js/api';
 import { useAccount } from '@gear-js/react-hooks';
 import { Box, Button, Modal, ScrollArea } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { InjectedAccountWithMeta, } from '@polkadot/extension-inject/types';
 import React, { useState } from 'react'
 
 interface WalletRowProps {
@@ -18,7 +19,7 @@ interface WalletRowProps {
 
 function WalletRow({ wallet, onConnect, loadingWallet, installed }: WalletRowProps) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { accounts } = useAccount()
+  const { accounts } = useAccount();
   const filter_account_connected = accounts?.filter((a: InjectedAccountWithMeta) => a?.meta?.source === wallet.key);
   const length_account_connected = filter_account_connected?.length || 0
   return (
@@ -106,6 +107,7 @@ function WalletRow({ wallet, onConnect, loadingWallet, installed }: WalletRowPro
                     variant="light"
                     color={MAIN_COLOR}
                     onClick={() => {
+                      console.log('acc :>> ', acc);
                       onConnect(acc);
                       close()
                     }}
@@ -133,6 +135,7 @@ const ModalConnectWallet = () => {
   const handleConnectWallet = async (wallet: InjectedAccountWithMeta, walletInfo: WALLET_METADATA) => {
     onAccountConnect({
       ...wallet,
+      address_decoded: decodeAddress(wallet?.address),
       walletInfo: walletInfo
     });
   }
