@@ -55,9 +55,9 @@ const FarmsContainer = () => {
         />
       </div>
       <Box hidden={tab !== 'live'}>
-        <div className='grid grid-cols-3 container mx-auto mt-10'>
+        {/* <div className='grid grid-cols-3 container mx-auto mt-10'>
           {loading ? <FarmCardSkeleton /> : <FarmCard />}
-        </div>
+        </div> */}
       </Box>
       <Box hidden={tab !== 'finished'}>
 

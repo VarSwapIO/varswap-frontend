@@ -70,3 +70,20 @@ type COIN_METADATA = {
   price_usd?: string | number;
   old_24h_price_usd?: string | number;
 }
+
+type POOL_LIQUIDITY_XY = {
+  reserve_x: string;
+  reserve_y: string;
+  total_supply?: string;
+  pool_id?: string;
+}
+
+type YOUR_LIQUIDITY_METADATA = {
+  amount: string;
+  coin_x?: COIN_METADATA;
+  coin_y?: COIN_METADATA;
+  decimals: number;
+  name: string;
+  symbol: string;
+  pool_id: string;
+}

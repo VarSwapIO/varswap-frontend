@@ -15,10 +15,7 @@ import { BigNumber } from '@/helpers/big_number_cal';
 import { useConnectWallet } from '@/context/useConnectWallet';
 import SwapStateProvider, { useSwapState } from '../context/useSwapState';
 import SwapSkeleton from './SwapSkeleton';
-import { router_client } from '../utils';
-import { HexString } from '@gear-js/api';
-import { Signer } from '@polkadot/types/types';
-import { web3FromSource } from '@polkadot/extension-dapp';
+import { approveToken, getUserSigner, router_client } from '../utils';
 import { CONTRACT_DATA, NETWORK, VFT_IDL } from '@/containers/router_sdk/constants';
 import { send_message } from '@/containers/router_sdk';
 import SailsCalls from '@/containers/router_sdk/SailsCalls';
@@ -35,19 +32,6 @@ type RESULT_SWAP = {
   router: undefined | any,
   payload: undefined | any
 }
-
-const getUserSigner = ({ address, source }: { address: any, source?: string }): Promise<[HexString, Signer]> => {
-  return new Promise(async (resolve, reject) => {
-    if (!address || !source) {
-      console.log("Accounts not ready!");
-      reject('Account not ready!');
-      return;
-    }
-    const { signer } = await web3FromSource(source);
-    resolve([address, signer]);
-  })
-}
-
 
 const SwapComponentImp = () => {
   const { connected, onChangeStateModalConnect, accountConnected, balances } = useConnectWallet();
@@ -92,10 +76,10 @@ const SwapComponentImp = () => {
   useEffect(() => {
     getResultSwapCal();
 
-    // let interval = setInterval(() => {
-    //   getResultSwapCal();
-    // }, 10000);
-    // return () => clearInterval(interval)
+    let interval = setInterval(() => {
+      getResultSwapCal();
+    }, 10000);
+    return () => clearInterval(interval)
   }, [token_swap, typed_value_debounce, slippage_debounce])
 
   const getResultSwapCal = async () => {
@@ -151,6 +135,7 @@ const SwapComponentImp = () => {
   };
 
   const handleSwap = async () => {
+    let id = null;
     try {
       setLoadingSwap(true);
 
@@ -167,37 +152,46 @@ const SwapComponentImp = () => {
 
       // approve token
       if (token_swap?.token_in?.address !== 'NATIVE') {
-        const vft_sails = await SailsCalls.new({
-          network: NETWORK,
-          idl: VFT_IDL,
-          contractId: resultSwapCal?.payload.args[2][0] as any,
-        });
-
-        const approve_payload = {
-          value: '0',
-          args: [
-            CONTRACT_DATA.programId,
-            resultSwapCal?.payload.args[0]
-          ]
-        }
-
-        const url_vft_command = `${resultSwapCal?.payload.args[2][0]}/Vft/Approve`
-        const approve_response = await send_message(url_vft_command, approve_payload, () => {
-          console.log('Message to send is loading');
-        }, async () => {
-          console.log('Approve successfully!');
-        }, () => {
-          console.log('An error ocurred!');
-        }, { userAddress, signer }, vft_sails);
-        console.log('approve_response', approve_response)
-        if (!approve_response) {
-          toast.error('An error occurred please try again!');
+        const approve_token_success = await approveToken(resultSwapCal?.payload.args[2][0], resultSwapCal?.payload.args[0], userAddress, signer, token_swap?.token_in)
+        if (!approve_token_success) {
           setLoadingSwap(false)
           return;
         }
       }
       // end approve
-      
+
+      id = notifications.show({
+        loading: true,
+        title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
+          <ImageBG
+            src={token_swap?.token_in?.icon || ''}
+            alt="product-logo"
+            width={23}
+            height={23}
+            className="w-[23px] h-[23px] rounded-full object-cover"
+          />
+          <p className='text-white font-semibold'>{token_swap?.token_in?.symbol}</p>
+          <svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4 text-mainColor' viewBox="0 0 24 24"><path fill="currentColor" d="m15 3.086l7.414 7.414H2v-2h15.586l-4-4zM22 13.5v2H6.414l4 4L9 20.914L1.586 13.5z"></path></svg>
+          <ImageBG
+            src={token_swap?.token_out?.icon || ''}
+            alt="product-logo"
+            width={23}
+            height={23}
+            className="w-[23px] h-[23px] rounded-full object-cover"
+          />
+          <p className='text-white font-semibold'>{token_swap?.token_out?.symbol}</p>
+        </div>,
+        message: <p className='text-orange-500 text-xs font-semibold'>Swap {typed_value} {token_swap?.token_in?.symbol} to {resultSwapCal?.amount_out_formatted} {token_swap?.token_out?.symbol} processing ...</p>,
+        autoClose: false,
+        withCloseButton: false,
+        className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+        classNames: {
+          body: "dark:text-slate-300 text-slate-700 font-medium",
+          root: 'mt-2',
+          closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+          description: 'dark:text-slate-300 text-slate-700 mt-2'
+        },
+      });
       const url_command = `${CONTRACT_DATA.programId}/RouterService/${resultSwapCal.payload.methodName}`;
       let block_current: string | undefined = undefined
       const response = await send_message(url_command, resultSwapCal.payload, () => {
@@ -212,8 +206,96 @@ const SwapComponentImp = () => {
 
       console.log('response', response)
       if (response?.ok?.length > 0) {
-        setTimeout(() => {
-          notifications.show({
+        notifications.update({
+          id,
+          loading: false,
+          title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
+            <ImageBG
+              src={token_swap?.token_in?.icon || ''}
+              alt="product-logo"
+              width={23}
+              height={23}
+              className="w-[23px] h-[23px] rounded-full object-cover"
+            />
+            <p className='text-white font-semibold'>{token_swap?.token_in?.symbol}</p>
+            <svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4 text-mainColor' viewBox="0 0 24 24"><path fill="currentColor" d="m15 3.086l7.414 7.414H2v-2h15.586l-4-4zM22 13.5v2H6.414l4 4L9 20.914L1.586 13.5z"></path></svg>
+            <ImageBG
+              src={token_swap?.token_out?.icon || ''}
+              alt="product-logo"
+              width={23}
+              height={23}
+              className="w-[23px] h-[23px] rounded-full object-cover"
+            />
+            <p className='text-white font-semibold'>{token_swap?.token_out?.symbol}</p>
+          </div>,
+          message: <div className=''>
+            <p className='text-green-500 text-xs font-semibold'>Swap {typed_value} {token_swap?.token_in?.symbol} to {resultSwapCal?.amount_out_formatted} {token_swap?.token_out?.symbol} successful</p>
+            <div className='text-[10px] flex justify-end items-center gap-2 text-mainColor hover:text-mainColor/80 w-fit ml-auto'>
+              <svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4' viewBox="0 0 24 24"><path fill="currentColor" d="M18 10.82a1 1 0 0 0-1 1V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h7.18a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v11a3 3 0 0 0 3 3h11a3 3 0 0 0 3-3v-7.18a1 1 0 0 0-1-1m3.92-8.2a1 1 0 0 0-.54-.54A1 1 0 0 0 21 2h-6a1 1 0 0 0 0 2h3.59L8.29 14.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0L20 5.41V9a1 1 0 0 0 2 0V3a1 1 0 0 0-.08-.38"></path></svg>
+              <a
+                href={`https://idea.gear-tech.io/explorer/${block_current}`}
+                target={"_blank"}
+                rel="noopener noreferrer"
+                className='font-semibold'
+              >View transaction </a>
+            </div>
+          </div>,
+          className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+          classNames: {
+            body: "dark:text-slate-300 text-slate-700 font-medium",
+            root: 'mt-2',
+            closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+            description: 'dark:text-slate-300 text-slate-700 mt-2'
+          },
+          autoClose: 8000,
+        })
+        setLoadingSwap(false);
+        setShowModalConfirmSwap(false);
+      } else {
+        notifications.update({
+          id,
+          loading: false,
+          title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
+            <ImageBG
+              src={token_swap?.token_in?.icon || ''}
+              alt="product-logo"
+              width={23}
+              height={23}
+              className="w-[23px] h-[23px] rounded-full object-cover"
+            />
+            <p className='text-white font-semibold'>{token_swap?.token_in?.symbol}</p>
+            <svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4 text-mainColor' viewBox="0 0 24 24"><path fill="currentColor" d="m15 3.086l7.414 7.414H2v-2h15.586l-4-4zM22 13.5v2H6.414l4 4L9 20.914L1.586 13.5z"></path></svg>
+            <ImageBG
+              src={token_swap?.token_out?.icon || ''}
+              alt="product-logo"
+              width={23}
+              height={23}
+              className="w-[23px] h-[23px] rounded-full object-cover"
+            />
+            <p className='text-white font-semibold'>{token_swap?.token_out?.symbol}</p>
+          </div>,
+          message: <div className=''>
+            <p className='text-red-500 text-xs font-semibold'>Swap {typed_value} {token_swap?.token_in?.symbol} to {resultSwapCal?.amount_out_formatted} {token_swap?.token_out?.symbol} failed</p>
+          </div>,
+          className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+          classNames: {
+            body: "dark:text-slate-300 text-slate-700 font-medium",
+            root: 'mt-2',
+            closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+            description: 'dark:text-slate-300 text-slate-700 mt-2'
+          },
+          autoClose: 8000,
+        })
+      }
+
+    } catch (error) {
+      if (error?.toString()?.includes("User denied request signature")) {
+        toast.error('User has rejected the request')
+      } else {
+        if (!!id) {
+          notifications.update({
+            id,
+            loading: false,
             title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
               <ImageBG
                 src={token_swap?.token_in?.icon || ''}
@@ -234,16 +316,7 @@ const SwapComponentImp = () => {
               <p className='text-white font-semibold'>{token_swap?.token_out?.symbol}</p>
             </div>,
             message: <div className=''>
-              <p className='text-green-500 text-xs font-semibold'>Swap {typed_value} {token_swap?.token_in?.symbol} to {resultSwapCal?.amount_out_formatted} {token_swap?.token_out?.symbol} successful</p>
-              <div className='text-[10px] flex justify-end items-center gap-2 text-mainColor hover:text-mainColor/80 w-fit ml-auto'>
-                <svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4' viewBox="0 0 24 24"><path fill="currentColor" d="M18 10.82a1 1 0 0 0-1 1V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h7.18a1 1 0 0 0 0-2H5a3 3 0 0 0-3 3v11a3 3 0 0 0 3 3h11a3 3 0 0 0 3-3v-7.18a1 1 0 0 0-1-1m3.92-8.2a1 1 0 0 0-.54-.54A1 1 0 0 0 21 2h-6a1 1 0 0 0 0 2h3.59L8.29 14.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0L20 5.41V9a1 1 0 0 0 2 0V3a1 1 0 0 0-.08-.38"></path></svg>
-                <a
-                  href={`https://idea.gear-tech.io/explorer/${block_current}`}
-                  target={"_blank"}
-                  rel="noopener noreferrer"
-                  className='font-semibold'
-                >View transaction </a>
-              </div>
+              <p className='text-red-500 text-xs font-semibold'>{error?.toString()}</p>
             </div>,
             className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
             classNames: {
@@ -254,16 +327,9 @@ const SwapComponentImp = () => {
             },
             autoClose: 8000,
           })
-          setLoadingSwap(false);
-          setShowModalConfirmSwap(false);
-        }, 1000);
-      }
-
-    } catch (error) {
-      if (error?.toString()?.includes("User denied request signature")) {
-        toast.error('User has rejected the request')
-      } else {
-        toast.error(error?.toString() || '')
+        } else {
+          toast.error(error?.toString() || '')
+        }
       }
       setLoadingSwap(false);
     }

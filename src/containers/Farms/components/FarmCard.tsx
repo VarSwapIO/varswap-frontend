@@ -227,7 +227,7 @@ const FarmCard = () => {
             <p>Total liquidity:</p>
             <p>${formatNumberDisplay((15000 || 0))}</p>
           </div>
-          <Link href={`/pool/add/${tokenA?.address}/${tokenB?.address}`} className='text-blue-500 flex gap-1 text-xs items-center font-semibold justify-end cursor-pointer hover:text-blue-600'>
+          <Link href={`/liquidity/add/${tokenA?.address}/${tokenB?.address}`} className='text-blue-500 flex gap-1 text-xs items-center font-semibold justify-end cursor-pointer hover:text-blue-600'>
             <p className='mt-1'>ADD {tokenA?.symbol}-{tokenB?.symbol} LP</p>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />

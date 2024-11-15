@@ -6,13 +6,13 @@ export const VARA_TOKEN_BASE: COIN_METADATA[] = [
     decimals: 12,
     address: 'NATIVE'
   },
-  {
-    icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
-    symbol: 'WVARA',
-    name: 'WVara Testnet',
-    decimals: 12,
-    address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
-  },
+  // {
+  //   icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
+  //   symbol: 'WVARA',
+  //   name: 'WVara Testnet',
+  //   decimals: 12,
+  //   address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
+  // },
   {
     icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
     symbol: 'USDT',

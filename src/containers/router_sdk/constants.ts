@@ -5,8 +5,8 @@ import JSBI from 'jsbi'
 /**
  * @deprecated use FACTORY_ADDRESS_MAP instead
  */
-export const FACTORY_ADDRESS = '0x47f0d84bc61dd913f7e15d860c7eae21005af7b778ec08c66388ffba9d3b28cc'
-export const ROUTER_ADDRESS = '0x84ec08ed03b1cd29421446067967ac2ed0b61b92ae47fdac86c89e3cb6b9c45a'
+export const FACTORY_ADDRESS = '0x1f75ed8662190b06f8c447dc4fd76551102d1a678abf8eaa58597a3008b6c96c'
+export const ROUTER_ADDRESS = '0xf168b479d9fa80686ee75181ee1a31e4fd7250aa4bde3986747f2555211ff777'
 export const NETWORK = 'wss://testnet-archive.vara.network'
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)
@@ -38,6 +38,40 @@ service Vft {
   events {
     Deposit: struct { dst: actor_id, wad: u256 };
     Withdraw: struct { src: actor_id, wad: u256 };
+    Approval: struct { owner: actor_id, spender: actor_id, value: u256 };
+    Transfer: struct { from: actor_id, to: actor_id, value: u256 };
+  }
+};
+`
+export const LPR_IDL = `
+constructor {
+  New : (factory: actor_id, token_a: actor_id, token_b: actor_id, name: str, symbol: str, decimals: u8);
+};
+
+service LpService {
+  Burn : (to: actor_id) -> result (struct { u256, u256 }, LpError);
+  Mint : (to: actor_id) -> result (u256, LpError);
+  Skim : (to: actor_id) -> result (null, LpError);
+  Swap : (amount0_out: u256, amount1_out: u256, to: actor_id) -> result (null, LpError);
+  Sync : () -> result (null, LpError);
+  Approve : (spender: actor_id, value: u256) -> bool;
+  Transfer : (to: actor_id, value: u256) -> bool;
+  TransferFrom : (from: actor_id, to: actor_id, value: u256) -> bool;
+  query GetReserves : () -> struct { u256, u256, u64 };
+  query Allowance : (owner: actor_id, spender: actor_id) -> u256;
+  query BalanceOf : (account: actor_id) -> u256;
+  query Decimals : () -> u8;
+  query Name : () -> str;
+  query Symbol : () -> str;
+  query TotalSupply : () -> u256;
+
+  events {
+    Mint: struct { sender: actor_id, amount: struct { u256, u256 } };
+    Burn: struct { sender: actor_id, amount: struct { u256, u256 }, to: actor_id };
+    Swap: struct { sender: actor_id, amount_in: struct { u256, u256 }, amount_out: struct { u256, u256 }, to: actor_id };
+    GetReserves: struct { reserve_a: u128, reserve_b: u128, block_timestamp_last: u64 };
+    Sync: struct { reserve_a: u256, reserve_b: u256 };
+    Skim: struct { amount_a: u256, amount_b: u256, to: actor_id };
     Approval: struct { owner: actor_id, spender: actor_id, value: u256 };
     Transfer: struct { from: actor_id, to: actor_id, value: u256 };
   }

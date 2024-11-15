@@ -10,7 +10,7 @@ export const NAVIGATIONS: ROUTER_NAV[] = [
     title: 'Liquidity',
     href: '/pools',
     type: 'DROPDOWN',
-    similar_links: ['/farms', '/pool/add', '/pool/create'],
+    similar_links: ['/farms', '/liquidity/add', '/liquidity/create'],
     start_child_link: "/pool",
     childrens: [
       {

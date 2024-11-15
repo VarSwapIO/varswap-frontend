@@ -21,14 +21,14 @@ const SmartRouterResult = ({ paths }: { paths: any[] }) => {
     const paths_length = paths_format?.length;
     let routers: any[] = []
 
-    if (paths_length === 3) {
+    if (paths_length === 2) {
       routers = [
         {
           token_in: {
             ...paths_format[0]
           },
           token_out: {
-            ...paths_format[paths_length - 1]
+            ...paths_format[1]
           },
           protocol_name: 'VarSwap'
         }
