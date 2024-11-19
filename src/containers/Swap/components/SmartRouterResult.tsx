@@ -68,7 +68,7 @@ const SmartRouterResult = ({ paths }: { paths: any[] }) => {
           <div className='z-10 cursor-pointer relative'>
             <Tooltip label={<p className='text-xs font-medium'>{pathRouters?.token_in?.symbol}</p>}>
               <ImageBG
-                className='w-8 h-8 min-w-8 rounded-full bg-white dark:border-slate-700 border-slate-100 border '
+                className='w-6 h-6 min-w-6 rounded-full bg-white dark:border-slate-700 border-slate-100 border '
                 src={pathRouters?.token_in?.icon}
                 alt="token"
                 width={32}
@@ -79,36 +79,37 @@ const SmartRouterResult = ({ paths }: { paths: any[] }) => {
           </div>
           <p className='w-full h-[1px] dark:bg-slate-600 bg-slate-200'></p>
           {pathRouters?.routers?.map((ps: any, index_ps: number) => (
-            <div className='z-10 cursor-pointer' key={index_ps}>
+            <div className='z-10 cursor-pointer flex gap-1 items-center' key={index_ps}>
               <Tooltip label={<p className='text-xs font-medium'>{ps?.protocol_name}</p>}>
                 <div className='flex items-center'>
                   <ImageBG
-                    className='w-8 h-8 min-w-8 rounded-full bg-white dark:border-slate-500 border-slate-100 border '
+                    className='w-6 h-6 min-w-6 rounded-full bg-white dark:border-slate-500 border-slate-100 border '
                     src={ps?.token_in?.icon}
                     alt="token"
-                    width={32}
-                    height={32}
+                    width={24}
+                    height={24}
                   />
                   <ImageBG
-                    className='w-8 h-8 min-w-8 rounded-full bg-white dark:border-slate-500 border-slate-100 border  -ml-2'
+                    className='w-6 h-6 min-w-6 rounded-full bg-white dark:border-slate-500 border-slate-100 border  -ml-2'
                     src={ps?.token_out?.icon}
                     alt="token"
-                    width={32}
-                    height={32}
+                    width={24}
+                    height={24}
                   />
                 </div>
               </Tooltip>
+              {index_ps < (pathRouters?.routers?.length - 1) && <p className='w-[12px] h-[0px] border-t-[1px] border-dotted border-mainColor'></p>}
             </div>
           ))}
           <p className='w-full h-[1px] dark:bg-slate-600 bg-slate-200'></p>
           <div className='z-10 cursor-pointer'>
             <Tooltip label={<p className='text-xs font-medium'>{pathRouters?.token_out?.symbol}</p>}>
               <ImageBG
-                className='w-8 h-8 min-w-8 rounded-full bg-white dark:border-slate-700 border-slate-100 border '
+                className='w-6 h-6 min-w-6 rounded-full bg-white dark:border-slate-700 border-slate-100 border '
                 src={pathRouters?.token_out?.icon}
                 alt="token"
-                width={32}
-                height={32}
+                width={24}
+                height={24}
               />
             </Tooltip>
           </div>

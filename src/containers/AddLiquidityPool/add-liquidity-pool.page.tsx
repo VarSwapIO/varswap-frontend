@@ -296,7 +296,7 @@ const AddLiquidityContainerImp = () => {
                         <img className='w-6 h-6 rounded-full bg-white object-cover' src={token_swap.token_in.icon || ''} alt="token1-pool" />
                         <img className='-ml-2 w-6 h-6 rounded-full bg-white object-cover' src={token_swap.token_out.icon || ''} alt="token2-pool" />
                       </div>
-                      <p className='text-mainColor font-semibold'>MovePump-{token_sort.token_x?.symbol} - {token_sort.token_y?.symbol}-LP</p>
+                      <p className='text-mainColor font-semibold'>{token_sort.token_x?.symbol} - {token_sort.token_y?.symbol}-LP</p>
                       <p className='ml-auto dark:text-white text-slate-900 font-semibold'>{amount_liquidity?.lp_amount}</p>
                     </div>
                     <div className=' grid grid-cols-3 gap-2 dark:text-white text-slate-900 font-medium'>

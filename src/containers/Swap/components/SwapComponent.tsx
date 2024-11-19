@@ -83,7 +83,7 @@ const SwapComponentImp = () => {
   }, [token_swap, typed_value_debounce, slippage_debounce])
 
   const getResultSwapCal = async () => {
-    if (!token_swap?.token_in || !token_swap?.token_out || !accountConnected?.address_decoded) return;
+    if (!token_swap?.token_in || !token_swap?.token_out ) return;
     try {
       setLoadingResult(true)
       const amount_in = typed_value_debounce
@@ -108,7 +108,7 @@ const SwapComponentImp = () => {
         toToken: token_swap.token_out,
         fromTokenAmount: amount_in,
         slippage: slippage_debounce * 100,
-        walletAddress: accountConnected?.address_decoded
+        walletAddress: accountConnected?.address_decoded || ''
       })
       console.log('quoteResponse :>> ', quoteResponse);
       setLoadingResult(false);
