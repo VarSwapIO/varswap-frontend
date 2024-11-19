@@ -5,8 +5,8 @@ import JSBI from 'jsbi'
 /**
  * @deprecated use FACTORY_ADDRESS_MAP instead
  */
-export const FACTORY_ADDRESS = '0x1f75ed8662190b06f8c447dc4fd76551102d1a678abf8eaa58597a3008b6c96c'
-export const ROUTER_ADDRESS = '0xf168b479d9fa80686ee75181ee1a31e4fd7250aa4bde3986747f2555211ff777'
+export const FACTORY_ADDRESS = '0x69cc707ff2d0fc3a98b4af00a0caa25a6abd6f91256b6d58c9f11dd00b4e7923'
+export const ROUTER_ADDRESS = '0x798a886f135d199e560f835132dc80fb9f9227aeb1a71c29e5a76e0f044cc46e'
 export const NETWORK = 'wss://testnet-archive.vara.network'
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)

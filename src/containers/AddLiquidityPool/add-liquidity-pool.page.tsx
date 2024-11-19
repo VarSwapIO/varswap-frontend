@@ -167,7 +167,7 @@ const AddLiquidityContainerImp = () => {
       <div className='relative w-full max-w-lg m-auto bg-white dark:bg-slate-900 border dark:border-slate-800 border-slate-100 rounded-3xl shadow-lg p-4'>
         <LoadingOverlay
           visible={loading}
-          zIndex={1000}
+          zIndex={350}
           overlayProps={{ radius: 'md', blur: 1 }}
           loaderProps={{ color: '#3898ec', type: 'bars' }}
         />

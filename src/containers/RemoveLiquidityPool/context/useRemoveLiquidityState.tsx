@@ -100,7 +100,7 @@ export default function RemoveLiquidityProvider({
   const [loadingPool, setLoadingPool] = useState<boolean>(false);
   const [poolCurrent, setPoolCurrent] = useState<POOL_LIQUIDITY_XY | undefined>(undefined);
   const [yourLiquidity, setYourLiquidity] = useState(0)
-
+  console.log('poolCurrent1234 :>> ', poolCurrent);
   // check default token swap by router
   useEffect(() => {
     if (params?.token_in && cointype_by_chain_arr.VARA?.length > 0) {
@@ -189,15 +189,25 @@ export default function RemoveLiquidityProvider({
             ]
           }
         )
-        console.log('pool_info :>> ', pool_info);
+        console.log('pool_info_123 :>> ', pool_info);
         if (pool_info?.ok?.length > 0) {
           const value_reserve_x = BigInt(pool_info?.ok?.[0]?.toString())?.toString() || '0';
           const value_reserve_y = BigInt(pool_info?.ok?.[1]?.toString())?.toString() || '0';
 
+          const lpr_sails = await SailsCalls.new({
+            network: NETWORK,
+            idl: LPR_IDL,
+            contractId: pool_info?.ok?.[2]?.toString(),
+          });
+
+          const total_supply = await lpr_sails.query('LpService/TotalSupply', {
+            callArguments: []
+          });
+          const total_supply_string = BigInt(total_supply?.toString())?.toString() || '0'
           setPoolCurrent({
             reserve_x: value_reserve_x,
             reserve_y: value_reserve_y,
-            total_supply: Math.round(Math.sqrt(+value_reserve_x * +value_reserve_y))?.toString(),
+            total_supply: total_supply_string,
             pool_id: pool_info?.ok?.[2]?.toString()
           })
         }

@@ -371,7 +371,7 @@ export const RemoveLiquidity = async ({ token_a, token_b, userAddress, signer, s
         let args = [
             token_a?.address,
             token_b?.address,
-            amount_liquidity.lp_amount,
+            amount_liquidity.lp_amount?.toString(),
             amount_liquidity.token_in,
             amount_liquidity.token_out,
             decoded_address,
@@ -424,7 +424,7 @@ export const RemoveLiquidity = async ({ token_a, token_b, userAddress, signer, s
             userAddress, signer
         }, sails);
         console.log('remove_lp_response', remove_lp_response)
-        if (!!remove_lp_response) {
+        if (!!remove_lp_response?.ok) {
             notifications.update({
                 id,
                 color: 'green',
@@ -573,8 +573,8 @@ export const AddLiquidity = async ({ token_a, token_b, userAddress, signer, sail
             token_b?.address,
             amount_x,
             amount_y,
-            amount_liquidity.minimum_input,
-            amount_liquidity.minimum_output,
+            amount_liquidity.minimum_input?.toString(),
+            amount_liquidity.minimum_output?.toString(),
             decoded_address,
             deadline
         ]
@@ -586,8 +586,8 @@ export const AddLiquidity = async ({ token_a, token_b, userAddress, signer, sail
             args = [
                 token_b?.address,
                 amount_y,
-                amount_liquidity.minimum_output,
-                amount_liquidity.minimum_input,
+                amount_liquidity.minimum_output?.toString(),
+                amount_liquidity.minimum_input?.toString(),
                 decoded_address,
                 deadline
             ]
@@ -600,8 +600,8 @@ export const AddLiquidity = async ({ token_a, token_b, userAddress, signer, sail
             args = [
                 token_a?.address,
                 amount_x,
-                amount_liquidity.minimum_input,
-                amount_liquidity.minimum_output,
+                amount_liquidity.minimum_input?.toString(),
+                amount_liquidity.minimum_output?.toString(),
                 decoded_address,
                 deadline
             ]
