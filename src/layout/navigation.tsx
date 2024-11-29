@@ -2,7 +2,7 @@ export const NAVIGATIONS: ROUTER_NAV[] = [
   {
     id: 'Trade',
     title: 'Swap',
-    href: '/swap',
+    href: '/swap/NATIVE/0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738',
     start_child_link: '/swap'
   },
   {

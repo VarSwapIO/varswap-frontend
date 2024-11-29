@@ -1,6 +1,8 @@
-import { Input, Popover } from '@mantine/core'
+import { get_list_token } from '@/services/overview.services'
+import { Input, Loader, Popover } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
-import React, { useState } from 'react'
+import QueryString from 'qs'
+import React, { useEffect, useState } from 'react'
 import CoinLine from './CoinLine'
 
 const coins_default: COIN_METADATA[] = [
@@ -10,7 +12,7 @@ const coins_default: COIN_METADATA[] = [
     icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
     address: 'NATIVE',
     verified: true,
-    decimals:12,
+    decimals: 12,
     price_usd: '--',
     old_24h_price_usd: 0,
   },
@@ -21,7 +23,7 @@ const coins_default: COIN_METADATA[] = [
     address: '0x0::usdt',
     verified: true,
     price_usd: '--',
-    decimals:12,
+    decimals: 12,
     old_24h_price_usd: 0,
   },
 ]
@@ -30,9 +32,70 @@ const HeaderSearch = () => {
   const [openRecommendSearch, setOpenRecommendSearch] = useState(false)
   const [loadingSearchInput, setLoadingSearchInput] = useState(false)
   const [search, setSearch] = useState('');
-  const [searchData, setSearchData] = useState<any>({});
-  const searchDebounce = useDebouncedValue(search, 500);
+  const [searchDebounce] = useDebouncedValue(search, 500);
 
+  useEffect(() => {
+    if (openRecommendSearch) {
+      getDataToken()
+    }
+  }, [searchDebounce, openRecommendSearch])
+
+
+  const getDataToken = async () => {
+    try {
+      setLoadingSearchInput(true);
+      const query_string = QueryString.stringify({
+        filters: {
+          $or: [
+            {
+              name: {
+                $containsi: searchDebounce
+              }
+            },
+            {
+              symbol: {
+                $containsi: searchDebounce
+              }
+            },
+            {
+              address: {
+                $eq: searchDebounce
+              }
+            }
+          ]
+        },
+        sort: ['volume_24h_usd:desc'],
+        pagination: {
+          page: 1,
+          pageSize: 10
+        },
+      }, {
+        encodeValuesOnly: true,
+      });
+      const { data: data_token, error: errorToken } = await get_list_token(query_string)
+      console.log('data-search', data_token)
+
+      if (data_token?.length === 0) return;
+
+      const format_data_token = data_token?.map((x: any) => {
+        return {
+          name: x?.name,
+          symbol: x?.symbol,
+          icon: x?.icon_url,
+          address: x?.address,
+          verified: x?.verified,
+          price_usd: x?.price_usd,
+          decimals: x?.decimals,
+          old_24h_price_usd: x?.old_24h_price_usd,
+        }
+      })
+      setDataSearch(format_data_token)
+    } catch (error) {
+      console.log('error', error)
+    } finally {
+      setLoadingSearchInput(false)
+    }
+  }
   return (
     <div className='flex justify-center items-center'>
       <Popover
@@ -57,9 +120,12 @@ const HeaderSearch = () => {
           />
         </Popover.Target>
         <Popover.Dropdown className='rounded-3xl !w-[470px] bg-white dark:bg-slate-800 dark:border-slate-700'>
-          <h2 className="text-lg font-semibold dark:text-white text-slate-900">Tokens</h2>
-          {dataSearch.length === 0 && <p className="text-center text-gray-400 text-sm"> Not found result</p>}
-          {dataSearch?.map((c: COIN_METADATA) => (<CoinLine key={c.address} coin={c} />))}
+          {loadingSearchInput ? <div className='flex justify-center items-center h-[250px]'><Loader /></div> :
+            <>
+              <h2 className="text-lg font-semibold dark:text-white text-slate-900">Tokens</h2>
+              {dataSearch.length === 0 && <p className="text-center text-gray-400 text-sm"> Not found result</p>}
+              {dataSearch?.map((c: COIN_METADATA) => (<CoinLine key={c.address} coin={c} />))}
+            </>}
         </Popover.Dropdown>
       </Popover>
 

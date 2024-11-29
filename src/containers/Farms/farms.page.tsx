@@ -1,19 +1,62 @@
 'use client'
 import { MAIN_COLOR } from '@/config/asset'
-import { Box, Center, rem, SegmentedControl } from '@mantine/core'
+import { Box, Center, Loader, rem, SegmentedControl } from '@mantine/core'
 import { IconCode, IconExternalLink, IconEye } from '@tabler/icons-react'
 import React, { useEffect, useState } from 'react'
 import FarmCard from './components/FarmCard'
-import FarmCardSkeleton from './components/FarmCardSkeleton'
+
+const FARM_DATA: FARM_POOL_METADATA[] = [
+  {
+    token_x: {
+      icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
+      symbol: 'USDT',
+      name: 'USDT',
+      decimals: 12,
+      address: '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738'
+    },
+    token_y: {
+      icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
+      symbol: 'TVARA',
+      name: 'Vara Network Testnet',
+      decimals: 12,
+      address: 'NATIVE'
+    },
+    token_reward: {
+      icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
+      symbol: 'USDT',
+      name: 'USDT',
+      decimals: 12,
+      address: '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738'
+    },
+    lp_stake_address: '0x3e58bb732341063cc7869636f84d6fac4524524f1c82dd6da0cb7a1711fd5aa4',
+    farm_contract_address: '0x9f32ddcbf4bdf6cfc135d31ca906f93323e93a5c4d88b46939d7ff145ffff0c1',
+    end_timestamp: '1735465248'
+  }
+]
 
 const FarmsContainer = () => {
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('live');
+  const [dataLive, setDataLive] = useState<FARM_POOL_METADATA[]>([]);
+  const [dataFinished, setDataFinished] = useState<FARM_POOL_METADATA[]>([])
 
   useEffect(() => {
     let timeout = setTimeout(() => {
-      setLoading(false)
-    }, 2000);
+      setLoading(false);
+      let live_data = [];
+      let finished_data = [];
+      for (let index = 0; index < FARM_DATA.length; index++) {
+        const element = FARM_DATA[index];
+        if (element?.end_timestamp && +element?.end_timestamp <= new Date().getTime() / 1000) {
+          finished_data.push(element)
+        } else {
+          live_data.push(element)
+        }
+      }
+
+      setDataLive(live_data);
+      setDataFinished(finished_data);
+    }, 1000);
 
     return () => clearTimeout(timeout)
   }, [])
@@ -54,14 +97,26 @@ const FarmsContainer = () => {
           }}
         />
       </div>
-      <Box hidden={tab !== 'live'}>
-        {/* <div className='grid grid-cols-3 container mx-auto mt-10'>
-          {loading ? <FarmCardSkeleton /> : <FarmCard />}
-        </div> */}
-      </Box>
-      <Box hidden={tab !== 'finished'}>
-
-      </Box>
+      {loading ? <div className='flex justify-center items-center h-[400px]'>
+        <Loader />
+      </div> :
+        <>
+          <Box hidden={tab !== 'live'}>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 container mx-auto mt-10'>
+              {dataLive?.map((v: FARM_POOL_METADATA) => (
+                <FarmCard key={`${v?.token_x?.address}-${v?.token_y?.address}`} data={v} />
+              ))}
+            </div>
+          </Box>
+          <Box hidden={tab !== 'finished'}>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 container mx-auto mt-10'>
+              {dataFinished?.map((v: FARM_POOL_METADATA) => (
+                <FarmCard key={`${v?.token_x?.address}-${v?.token_y?.address}`} data={v} />
+              ))}
+            </div>
+          </Box>
+        </>
+      }
     </div>
   )
 }

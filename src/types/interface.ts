@@ -87,3 +87,16 @@ type YOUR_LIQUIDITY_METADATA = {
   symbol: string;
   pool_id: string;
 }
+
+type FARM_POOL_METADATA = {
+  token_x: COIN_METADATA;
+  token_y: COIN_METADATA;
+  token_reward: COIN_METADATA;
+  end_timestamp?: string;
+  lp_stake_address?: string;
+  acc_x_per_share?: string;
+  x_per_second?: string;
+  total_amount?: string;
+  last_reward_timestamp?: string;
+  farm_contract_address: string;
+}

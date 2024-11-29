@@ -20,7 +20,7 @@ interface InputLPTokenProps {
 }
 const InputLPToken = ({ value, onChange, tokenA, tokenB, disable, loading, hiddenMaxBtn, lpBalance, type }: InputLPTokenProps) => {
   const onChangeByPercent = (percent_num: number) => {
-    const price = BigNumber.parseNumberToOriginal(+(lpBalance || 0) * (percent_num / 100) - 0, 0)?.toString();
+    const price = (+(lpBalance || 0) * (percent_num / 100) - 0)?.toString();
     onChange && onChange(price || 0);
   };
   return (

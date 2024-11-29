@@ -25,7 +25,7 @@ interface AssetState extends AssetStateProps, AssetActionProps {
 const init_state: AssetStateProps = {
   cointype_by_chain: {
     'VARA': {
-      "NATIVE":{
+      "NATIVE": {
         icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
         symbol: 'TVARA',
         name: 'Vara Network Testnet',
@@ -84,7 +84,16 @@ export const useAssetStore = create<AssetState>()(
             },
             cointype_by_chain: {
               ...state.cointype_by_chain,
-              [chain]: data_to_obj
+              [chain]: {
+                ...data_to_obj,
+                "0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8": {
+                  icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
+                  symbol: 'WVARA',
+                  name: 'WVara Network',
+                  decimals: 12,
+                  address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
+                },
+              }
             }
           }
         ))

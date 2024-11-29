@@ -1,17 +1,47 @@
 'use client'
 import PaginationBG from '@/components/Pagination/PaginationBG';
+import { get_list_user_trading } from '@/services/overview.services';
 import { CloseButton, Input } from '@mantine/core';
 import { SortingState } from '@tanstack/react-table';
-import React, { useState } from 'react'
+import QueryString from 'qs';
+import React, { useEffect, useState } from 'react'
 import LeaderboardDataTable from './components/LeaderboardDataTable'
 
 const LeaderboardContainer = () => {
-  const [dataTokenPriceFilter, setDataTokenPriceFilter] = useState([]);
+  const [dataTradingUser, setDataTradingUser] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(false);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [searchAddress, setSearchAddress] = useState('')
+  const [sorting, setSorting] = useState<SortingState>([{
+    desc: true,
+    id: "total_volume_usd"
+  }]);
+  const [searchAddress, setSearchAddress] = useState('');
+
+  useEffect(() => {
+    getDataListToken()
+  }, [currentPage, sorting])
+
+  const getDataListToken = async () => {
+    setLoading(true);
+    const sort_value = `${sorting?.[0]?.id}:${sorting?.[0]?.desc ? 'desc' : 'asc'}`
+    const query_string = QueryString.stringify({
+      sort: [sort_value],
+      pagination: {
+        page: currentPage,
+        pageSize: 100,
+      },
+    }, {
+      encodeValuesOnly: true,
+    });
+    const { data, error, meta } = await get_list_user_trading(query_string)
+    console.log('data', data)
+    if (!error) {
+      setDataTradingUser(data)
+      setTotalPage(meta.pagination.pageCount)
+    }
+    setLoading(false)
+  }
 
   return (
     <div className='min-h-[90vh]'>
@@ -40,32 +70,14 @@ const LeaderboardContainer = () => {
               />
             }
           />
-          {/* <FilterDropdown
-            options={[
-              {
-                title: '30D',
-                key: '30d'
-              },
-              {
-                title: '7D',
-                key: '7d'
-              },
-              {
-                title: '1D',
-                key: '1d'
-              }
-            ]}
-            selected={filter}
-            onSelected={(value: string) => setFilter(value)}
-          /> */}
         </div>
         <LeaderboardDataTable
-          data={dataTokenPriceFilter}
+          data={dataTradingUser}
           sorting={sorting}
           onSort={(sort: SortingState) => setSorting(sort)}
           loading={loading}
         />
-        {(!loading && dataTokenPriceFilter?.length > 0) && <div className='flex justify-center mt-auto'>
+        {(!loading && dataTradingUser?.length > 0) && <div className='flex justify-center mt-auto'>
           <PaginationBG
             total={totalPage}
             value={currentPage}

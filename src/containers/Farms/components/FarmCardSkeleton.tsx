@@ -35,7 +35,7 @@ const FarmCardSkeleton = () => {
           <p className=" font-semibold">Earned</p>
           <div className='flex justify-between items-center'>
             <div className='mt-2'>
-              <SkeletonBG width={90} height={15} />
+              <SkeletonBG width={90} height={20} />
               <SkeletonBG width={90} height={15} className="mt-2" />
             </div>
             <Button
@@ -46,7 +46,7 @@ const FarmCardSkeleton = () => {
                 '--mantine-color-dark-6': '#232a37', '--mantine-color-dark-3': '#7C8898'
               }}
             >
-              Claim
+              Harvest
             </Button>
           </div>
         </div>
@@ -54,7 +54,7 @@ const FarmCardSkeleton = () => {
           <p className=" font-semibold">Staked</p>
           <div className='flex justify-between mt-1'>
             <div>
-              <SkeletonBG width={90} height={15} />
+              <SkeletonBG width={90} height={20} />
               <SkeletonBG width={90} height={15} className="mt-2" />
             </div>
             <Button
@@ -70,7 +70,7 @@ const FarmCardSkeleton = () => {
           </div>
         </div>
       </div>
-      <div className='space-y-2 p-4 text-txt-200 dark:text-white text-sm border-t'>
+      <div className='space-y-2 p-4 text-txt-200 dark:text-white text-sm border-t border-slate-800'>
         <div className='flex items-center justify-between font-semibold '>
           <p>Total liquidity:</p>
           <SkeletonBG width={90} height={15} />

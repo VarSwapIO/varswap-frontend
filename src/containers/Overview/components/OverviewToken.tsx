@@ -1,15 +1,12 @@
 import { MAIN_COLOR } from '@/config/asset';
 import TokenDataTable from '@/containers/Tokens/components/TokenDataTable'
+import TokenContainer from '@/containers/Tokens/tokens.page';
 import { Button } from '@mantine/core';
 import { SortingState } from '@tanstack/react-table';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React from 'react'
 
 const OverviewToken = () => {
-  const [dataTokenPriceFilter, setDataTokenPriceFilter] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [sorting, setSorting] = useState<SortingState>([]);
-
   return (
     <div className='container mx-auto'>
       <div className='flex justify-between items-center mb-2 mt-10 dark:text-white text-slate-900 font-semibold'>
@@ -28,12 +25,7 @@ const OverviewToken = () => {
           Explore
         </Button>
       </div>
-      <TokenDataTable
-        data={dataTokenPriceFilter}
-        sorting={sorting}
-        onSort={(sort: SortingState) => setSorting(sort)}
-        loading={loading}
-      />
+      <TokenContainer overview={true} />
     </div>
   )
 }

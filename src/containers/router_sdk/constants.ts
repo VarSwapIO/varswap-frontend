@@ -1,19 +1,20 @@
 import { HexString } from '@gear-js/api'
 import { Percent } from './core'
 import JSBI from 'jsbi'
+import { ENV_VARSWAP } from '@/config/env'
 
 /**
  * @deprecated use FACTORY_ADDRESS_MAP instead
  */
-export const FACTORY_ADDRESS = '0x69cc707ff2d0fc3a98b4af00a0caa25a6abd6f91256b6d58c9f11dd00b4e7923'
-export const ROUTER_ADDRESS = '0x798a886f135d199e560f835132dc80fb9f9227aeb1a71c29e5a76e0f044cc46e'
-export const NETWORK = 'wss://testnet-archive.vara.network'
+export const FACTORY_ADDRESS = ENV_VARSWAP.FACTORY_ADDRESS
+export const ROUTER_ADDRESS = ENV_VARSWAP.ROUTER_ADDRESS as `0x${string}`
+export const NETWORK = ENV_VARSWAP.NETWORK
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)
 
 interface ContractSails {
-    programId: HexString,
-    idl: string
+  programId: HexString,
+  idl: string
 }
 
 
@@ -77,10 +78,81 @@ service LpService {
   }
 };
 `
+export const FARM_IDL = `
+type LpStakingError = enum {
+  ErrorNotAdmin,
+  ErrorCoinNotPublished,
+  ErrorInvalidLpToken,
+  ErrorLpTokenExist,
+  ErrorWithdrawInsufficient,
+  ErrorInvalidMoveRate,
+  ErrorPidNotExist,
+  ErrorCoinNotRegistered,
+  ErrorMoveRewardOverflow,
+  ErrorInvalidCoinDecimal,
+  ErrorPoolUserInfoNotExist,
+  ErrorZeroAccount,
+  ErrorUpkeepElapsedOverCap,
+  ErrorInputBalance,
+  EPoolStillLive,
+  EConnectToken,
+  ETransferTokenFailed,
+  TransferTokenFromFailed,
+  TransferTokenFailed,
+  TransferFromLiquidityFailed,
+  EAmountWithdrawToHight,
+  TransferLiquidityFailed,
+  EPoolEnd,
+};
+
+type PoolStakingInfo = struct {
+  total_user: u64,
+  total_amount: u256,
+  acc_x_per_share: u256,
+  x_per_second: u256,
+  last_reward_timestamp: u64,
+  end_timestamp: u64,
+  staked_token: actor_id,
+  reward_token: actor_id,
+  admin: actor_id,
+  users_info: vec UserInfo,
+  precision_factor: u256,
+};
+
+type UserInfo = struct {
+  amount: u256,
+  reward_debt: u256,
+};
+
+constructor {
+  New : (end_time: u64, staked_token: actor_id, reward_token: actor_id, x_per_second: u256, admin: actor_id);
+};
+
+service LpStakingService {
+  ChangeRewardToken : (new_reward_token: actor_id) -> result (bool, LpStakingError);
+  Deposit : (amount: u256) -> result (bool, LpStakingError);
+  RecoverToken : (token: actor_id) -> result (bool, LpStakingError);
+  SetAdmin : (new_admin: actor_id) -> result (bool, LpStakingError);
+  UpdateEndPool : (new_time_end: u64) -> result (bool, LpStakingError);
+  UpdateRewardPerSecond : (new_reward_per_second: u256) -> result (bool, LpStakingError);
+  Withdraw : (_amount: u256) -> result (bool, LpStakingError);
+  query CheckLiquidityBalance : (_user: actor_id) -> u256;
+  query CheckRewardBalance : (_user: actor_id) -> u256;
+  query PendingReward : (_user: actor_id) -> u256;
+  query PoolInfo : () -> PoolStakingInfo;
+  query UserInfo : (_user: actor_id) -> UserInfo;
+
+  events {
+    Deposit: struct { user: actor_id, amount: u256, total_lp_staked: u256, staked_token: actor_id };
+    Withdraw: struct { user: actor_id, amount: u256, total_lp_staked: u256, staked_token: actor_id };
+    TokenRecovery: struct { token: actor_id, amount: u256 };
+  }
+};
+`
 
 export const CONTRACT_DATA: ContractSails = {
-    programId: ROUTER_ADDRESS,
-    idl: `type RouterError = enum {
+  programId: ROUTER_ADDRESS,
+  idl: `type RouterError = enum {
   PairAlreadyExists,
   TransferLiquidityFailed,
   TransferFromLiquidityFailed,

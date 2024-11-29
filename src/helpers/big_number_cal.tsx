@@ -102,7 +102,7 @@ const exponentiate = (
 	return String(exponentiate)
 }
 
-const parseNumberToOriginal = (a_input: InputBignumber, decimals = 18) => {
+const parseNumberToOriginal = (a_input: InputBignumber, decimals = 12) => {
 	if (!a_input) {
 		return null
 	}
@@ -127,7 +127,7 @@ const parseNumberToOriginal = (a_input: InputBignumber, decimals = 18) => {
 	return String(original)
 }
 
-const parseNumberWithDecimals = (a_input: InputBignumber, decimals = 18) => {
+const parseNumberWithDecimals = (a_input: InputBignumber, decimals = 12) => {
 	if (!a_input) {
 		return null
 	}

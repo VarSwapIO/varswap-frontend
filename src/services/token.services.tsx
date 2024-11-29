@@ -34,3 +34,43 @@ export const getBalanceLP = async (contractID: string, address: string) => {
   const balance_string = BigInt(response?.toString())?.toString() || '0'
   return balance_string
 }
+
+export const getTokenMetadata = async (contractID: string) => {
+  if (!contractID) return;
+  const vft_sails = await SailsCalls.new({
+    network: NETWORK,
+    idl: VFT_IDL,
+    contractId: contractID as `0x${string}`,
+  });
+
+  const [name, symbol, decimals] = await Promise.all([
+    vft_sails.query('Vft/Name', {
+      callArguments: [
+      ]
+    }),
+    vft_sails.query('Vft/Symbol', {
+      callArguments: [
+      ]
+    }),
+    vft_sails.query('Vft/Decimals', {
+      callArguments: [
+      ]
+    })
+  ])
+
+  if (!!name && !!symbol && !!decimals) {
+    return {
+      icon: '/images/features/image-placeholder.png',
+      symbol: symbol,
+      name: name,
+      decimals: decimals,
+      address: contractID
+    }
+  }
+  return undefined
+}
+
+// export const getAllListToken = async() => {
+
+// }
+

@@ -2,6 +2,7 @@ import DataTableBG from '@/components/DataTable'
 import ImageBG from '@/components/Image/ImageBG';
 import PercentLine from '@/components/TextLine/PercentLine';
 import { formatNumberDisplay, formatPriceTokenDisplay } from '@/helpers/format_number_display';
+import { shortString } from '@/helpers/utils';
 import { SortingState } from '@tanstack/react-table';
 import Link from 'next/link';
 import React, { useState } from 'react'
@@ -32,38 +33,30 @@ const LeaderboardDataTable = ({
               header: `Address`,
               enableSorting: true,
               cell: (t: any) =>
-                <Link href={`/trade/spot/${t?.row.original.symbol}`} className='my-1.5 flex gap-2 items-center w-fit no-underline text-black dark:text-white '>
-                  <ImageBG
-                    src={t?.row.original.logo}
-                    alt={t?.row.original.symbol}
-                    width={28}
-                    height={28}
-                    className="rounded-full object-cover border border-solid border-slate-200 dark:border-slate-700 shadow-sm"
-                    loading='lazy'
-                  />
-                  <p className='m-0 font-semibold'>{t?.row.original.symbol?.replace("USDT", "")}</p>
-                </Link>
+                <div className='my-1.5 flex gap-2 items-center w-fit no-underline text-black dark:text-white '>
+                  <p className='m-0 font-semibold'>{shortString(t?.row.original.address, 6, 6)}</p>
+                </div>
             },
+            // {
+            //   accessorKey: 'priceChangePercent',
+            //   header: "Change 24H",
+            //   enableSorting: true,
+            //   cell: (t: any) => <p className='m-0'>{<PercentLine value={+t.getValue()} />}</p>,
+            //   sortingFn: (rowA: any, rowB: any) => {
+            //     return +rowA.original.priceChangePercent - rowB.original.priceChangePercent
+            //   },
+            // },
             {
-              accessorKey: 'priceChangePercent',
-              header: "Change 24H",
-              enableSorting: true,
-              cell: (t: any) => <p className='m-0'>{<PercentLine value={+t.getValue()} />}</p>,
-              sortingFn: (rowA: any, rowB: any) => {
-                return +rowA.original.priceChangePercent - rowB.original.priceChangePercent
-              },
-            },
-            {
-              accessorKey: 'quoteVolume',
+              accessorKey: 'total_volume_usd',
               header: "Total Volume",
               enableSorting: true,
-              cell: (t: any) => <p className='m-0'>{formatNumberDisplay(t.getValue(), 'thousand')}</p>
+              cell: (t: any) => <p className='m-0'>${formatNumberDisplay(t.getValue(), 'thousand')}</p>
             },
             {
-              accessorKey: 'vol24h',
+              accessorKey: 'volume_24h_usd',
               header: "Volume 24h",
               enableSorting: true,
-              cell: (t: any) => <p className='m-0'>{formatNumberDisplay(t.getValue(), 'thousand')}</p>
+              cell: (t: any) => <p className='m-0'>${formatNumberDisplay(t.getValue(), 'thousand')}</p>
             },
           ]}
           onSorting={(state: SortingState) => onSort(state)}

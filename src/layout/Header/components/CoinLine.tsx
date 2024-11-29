@@ -1,6 +1,7 @@
 import ImageBG from '@/components/Image/ImageBG';
 import { MAIN_COLOR } from '@/config/asset';
 import { formatPriceTokenDisplay } from '@/helpers/format_number_display';
+import { convertToAddressNative } from '@/helpers/pools';
 import { percentBetweenTwoValue } from '@/helpers/utils';
 import { Tooltip } from '@mantine/core'
 import Link from 'next/link'
@@ -19,7 +20,7 @@ const CoinLine = ({ coin }: { coin: COIN_METADATA }) => {
           height={40}
           width={40}
         />
-        <Link href={`/token/${coin.address}`}
+        <Link href={`/token/${convertToAddressNative(coin.address)}`}
           className="flex flex-col items-start">
           <div className='flex items-center gap-2'>
             <p className='max-w-[150px] md:max-w-none line-clamp-1 font-semibold dark:text-white text-slate-900'>{coin?.name}</p>

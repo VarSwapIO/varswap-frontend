@@ -1,15 +1,17 @@
 import InputLPToken from '@/components/Button/InputLPToken'
 import { MAIN_COLOR } from '@/config/asset';
-import { Button, Modal } from '@mantine/core'
+import { Button, LoadingOverlay, Modal } from '@mantine/core'
 import React from 'react'
 
-const ModalStakedLP = ({ opened, close, value, onChange, tokenA, tokenB, lpBalance, type }: MODAL_TYPE & {
+const ModalStakedLP = ({ opened, close, value, onChange, tokenA, tokenB, lpBalance, type, onSubmit, loading }: MODAL_TYPE & {
   value: string | number;
-  onChange: (amount: string | number) => void;
   tokenA: TOKEN_METADATA;
   tokenB: TOKEN_METADATA;
   lpBalance: number | string;
-  type: 'withdraw' | 'stake'
+  type: 'withdraw' | 'stake';
+  loading: boolean;
+  onChange: (amount: string | number) => void;
+  onSubmit: () => void;
 }) => {
   return (
     <Modal
@@ -24,9 +26,15 @@ const ModalStakedLP = ({ opened, close, value, onChange, tokenA, tokenB, lpBalan
         body: 'dark:bg-slate-800',
         close: 'dark:hover:bg-slate-700'
       }}
-      // closeOnClickOutside={false}
+      closeOnClickOutside={false}
       onClose={close}
     >
+      <LoadingOverlay
+        visible={loading}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 1 }}
+        loaderProps={{ color: '#3898ec' }}
+      />
       <InputLPToken
         lpBalance={lpBalance}
         tokenA={tokenA}
@@ -48,7 +56,7 @@ const ModalStakedLP = ({ opened, close, value, onChange, tokenA, tokenB, lpBalan
           Cancel
         </Button>
         <Button
-          onClick={() => { }}
+          onClick={() => onSubmit()}
           className='font-semibold '
           w={'100%'}
           size={'sm'}

@@ -240,6 +240,109 @@ export const approveLPToken = async (contract_id: string, value: string, userAdd
         return false;
     }
 }
+export const approveLPTokenForFarm = async (contract_id: string, contract_approve: string, value: string, userAddress: any, signer: Signer, token_info?: COIN_METADATA) => {
+    console.log('token_info', value, token_info)
+    const id = notifications.show({
+        loading: true,
+        title: `Approve ${token_info?.symbol} for transaction`,
+        message: `Confirming use of ${BigNumber.parseNumberToOriginal(value, token_info?.decimals)} ${token_info?.symbol}`,
+        autoClose: false,
+        withCloseButton: false,
+        className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+        classNames: {
+            body: "dark:text-slate-300 text-slate-700 font-medium",
+            root: 'mt-2',
+            closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+            description: 'dark:text-slate-300 text-slate-700 mt-2'
+        },
+    });
+
+    try {
+        const vft_sails = await SailsCalls.new({
+            network: NETWORK,
+            idl: LPR_IDL,
+            contractId: contract_id as any,
+        });
+
+        const approve_payload = {
+            value: '0',
+            args: [
+                contract_approve,
+                value
+            ]
+        }
+
+        const url_vft_command = `${contract_id}/LpService/Approve`
+        const approve_response = await send_message(url_vft_command, approve_payload, () => {
+            console.log('Message to send is loading');
+        }, async () => {
+            console.log('Approve successfully!');
+        }, () => {
+            console.log('An error ocurred!');
+        }, { userAddress, signer }, vft_sails);
+        console.log('approve_response', approve_response)
+        if (!approve_response) {
+            notifications.update({
+                id,
+                color: 'red',
+                title: `Approve ${token_info?.symbol} for transaction`,
+                message: <p className='text-sm text-red-500 line-clamp-1'>{`An error occurred please try again!`}</p>,
+                icon: <IconX style={{ width: rem(18), height: rem(18) }} />,
+                loading: false,
+                withCloseButton: true,
+                autoClose: 5000,
+                className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+                classNames: {
+                    body: "dark:text-slate-300 text-slate-700 font-medium",
+                    root: 'mt-2',
+                    closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+                    description: 'dark:text-slate-300 text-slate-700 mt-2'
+                },
+            });
+            return false;
+        } else {
+            notifications.update({
+                id,
+                color: 'green',
+                title: `Approve ${token_info?.symbol} for transaction`,
+                withCloseButton: true,
+                loading: false,
+                message: <div className=''>
+                    <p className='text-green-500 text-xs font-semibold'>Approve successfully!</p>
+                </div>,
+                icon: <IconCheck style={{ width: rem(18), height: rem(18) }} />,
+                className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+                classNames: {
+                    body: "dark:text-slate-300 text-slate-700 font-medium",
+                    root: 'mt-2',
+                    closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+                    description: 'dark:text-slate-300 text-slate-700 mt-2'
+                },
+                autoClose: 5000,
+            });
+            return true
+        }
+    } catch (error) {
+        notifications.update({
+            id,
+            color: 'red',
+            title: `Approve ${token_info?.symbol} for transaction`,
+            message: <p className='text-sm text-red-500 line-clamp-1'>{error?.toString()}</p>,
+            icon: <IconX style={{ width: rem(18), height: rem(18) }} />,
+            loading: false,
+            withCloseButton: true,
+            autoClose: 5000,
+            className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+            classNames: {
+                body: "dark:text-slate-300 text-slate-700 font-medium",
+                root: 'mt-2',
+                closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+                description: 'dark:text-slate-300 text-slate-700 mt-2'
+            },
+        });
+        return false;
+    }
+}
 
 export const CreateLiquidityPair = async ({ token_a, token_b, userAddress, signer, sails }:
     { token_a: COIN_METADATA; token_b: COIN_METADATA; userAddress: any; signer: Signer; sails: SailsCalls }) => {
@@ -267,7 +370,7 @@ export const CreateLiquidityPair = async ({ token_a, token_b, userAddress, signe
             convertNativeToAddress(token_a?.address),
             convertNativeToAddress(token_b?.address)
         ]
-        let value = '1000000000000'
+        let value = '1000000000000' // fee: 1 VARA
         console.log('args', args)
         const approve_response = await send_message(url_command, {
             methodName,

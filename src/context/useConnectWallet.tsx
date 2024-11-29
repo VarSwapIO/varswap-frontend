@@ -7,6 +7,7 @@ import { useAccount, useBalance, useBalanceFormat } from '@gear-js/react-hooks';
 import { LIST_OF_TOKENS_BY_ADDRESS } from '@/config/tokens';
 import { getBalanceToken } from '@/services/token.services';
 import { BigNumber } from '@/helpers/big_number_cal';
+import { useAssetStore } from '@/stores/assetStore';
 
 export interface ACCOUNT_CONNECTED extends InjectedAccountWithMeta {
   walletInfo: WALLET_METADATA;
@@ -21,7 +22,7 @@ type ConnectWalletContextProps = {
   onChangeStateModalConnect: (status: boolean) => void;
   onAccountConnect: (data: ACCOUNT_CONNECTED) => void;
   onDisconnect: () => void;
-  // getBalances: () => void;
+  getBalances: () => void;
 }
 
 
@@ -34,7 +35,7 @@ const ConnectWalletContext = createContext<ConnectWalletContextProps>({
   onChangeStateModalConnect: () => { },
   onAccountConnect: () => { },
   onDisconnect: () => { },
-  // getBalances: () => { }
+  getBalances: () => { }
 })
 
 export const useConnectWallet = () => useContext(ConnectWalletContext)
@@ -45,6 +46,7 @@ export default function ConnectWalletProvider({
 }: {
   children: JSX.Element
 }) {
+  const { cointype_by_chain } = useAssetStore()
   const { logout, login } = useAccount();
   const [openModalConnectWallet, setOpenModalConnectWallet] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -84,7 +86,7 @@ export default function ConnectWalletProvider({
       },
     }
 
-    const address_tokens = Object.keys(LIST_OF_TOKENS_BY_ADDRESS);
+    const address_tokens = Object.keys(cointype_by_chain?.VARA);
 
     const address_token_except_native = address_tokens?.filter((address: string) => address !== 'NATIVE');
     const promises = await address_token_except_native.map(async (x: string) => {
@@ -96,7 +98,7 @@ export default function ConnectWalletProvider({
       const coint_amount = amount_all[index]
 
       balance_default[coin_address] = {
-        ...LIST_OF_TOKENS_BY_ADDRESS[coin_address],
+        ...cointype_by_chain?.VARA?.[coin_address],
         amount: coint_amount
       }
     }
@@ -143,7 +145,7 @@ export default function ConnectWalletProvider({
       onChangeStateModalConnect,
       onAccountConnect,
       onDisconnect,
-      // getBalances
+      getBalances: getAllBalance
     }),
     [
       connected,

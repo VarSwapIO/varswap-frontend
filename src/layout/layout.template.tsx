@@ -1,4 +1,5 @@
 'use client';
+import { ENV_VARSWAP } from '@/config/env';
 import ConnectWalletProvider from '@/context/useConnectWallet';
 import { VaraAccountProvider, VaraAlertProvider, VaraAPIProvider } from '@/libraries/vara-gear';
 import { Container, useMantineColorScheme } from '@mantine/core'
@@ -18,7 +19,7 @@ const LayoutTemplate = ({ children }: { children: any }) => {
 
   return (
     <VaraAccountProvider >
-      <VaraAPIProvider initialArgs={{ endpoint: 'wss://testnet-archive.vara.network' }}>
+      <VaraAPIProvider initialArgs={{ endpoint: ENV_VARSWAP.NETWORK }}>
         <VaraAlertProvider >
           <ConnectWalletProvider>
             <div className='relative'>

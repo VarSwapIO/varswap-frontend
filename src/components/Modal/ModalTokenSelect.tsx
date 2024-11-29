@@ -7,6 +7,7 @@ import React, { FC, useCallback, useEffect, useRef, useState, memo } from 'react
 import ImageBG from '../Image/ImageBG';
 import _ from 'lodash'
 import { FixedSizeList as List } from "react-window";
+import { getTokenMetadata } from '@/services/token.services';
 
 export interface ModalTokenSelectProps {
   show: boolean;
@@ -19,7 +20,7 @@ const ModalTokenSelect: FC<ModalTokenSelectProps> = ({ show, onClick, onClose, t
   const { cointype_by_chain_arr, updateCoinTypeByChain } = useAssetStore();
   const { balances } = useConnectWallet();
 
-  const [listToken, setListToken] = useState<any[]>([])
+  const [listToken, setListToken] = useState<TOKEN_METADATA[]>([])
 
   const [loadingCheckToken, setLoadingCheckToken] = useState(false);
 
@@ -36,10 +37,41 @@ const ModalTokenSelect: FC<ModalTokenSelectProps> = ({ show, onClick, onClose, t
     const name = e.target.value?.trim();
     const name_lowcase = name?.toLowerCase();
     if (!name) {
-      // todo
+      const list_token = cointype_by_chain_arr.VARA
+      setListToken(list_token || [])
     } else {
+      const token_filter = cointype_by_chain_arr?.VARA?.filter((x: COIN_METADATA) => {
+        if (x?.address?.includes(name) || x?.name?.toLowerCase()?.includes(name_lowcase) || x?.symbol?.includes(name_lowcase)) {
+          return true;
+        } else {
+          return false
+        }
+      })
 
-
+      if (name?.length >= 64 && name?.length <= 66) {
+        setLoadingCheckToken(true)
+        try {
+          const check_token = await getTokenMetadata(name)
+          console.log('check_token', check_token)
+          if (check_token?.symbol) {
+            const obj: any = {
+              symbol: check_token?.symbol,
+              name: check_token?.name ? check_token?.name : check_token?.symbol,
+              icon: check_token?.icon || '/images/features/image-placeholder.png',
+              decimals: check_token?.decimals,
+              address: check_token?.address || name,
+              verified: false,
+              is_new: true
+            }
+            setListToken([obj]);
+          }
+        } catch (error) {
+          setListToken([]);
+        }
+        setLoadingCheckToken(false)
+      } else {
+        setListToken(token_filter || []);
+      }
     }
 
   };

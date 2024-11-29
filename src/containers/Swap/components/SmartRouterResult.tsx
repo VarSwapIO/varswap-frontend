@@ -1,5 +1,5 @@
 import ImageBG from '@/components/Image/ImageBG'
-import { TOKEN_LIST } from '@/mockData'
+import { convertNativeToAddress } from '@/helpers/pools'
 import { useAssetStore } from '@/stores/assetStore'
 import { Tooltip } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
@@ -15,7 +15,8 @@ const SmartRouterResult = ({ paths }: { paths: any[] }) => {
 
   const getPaths = () => {
     const paths_format = (paths)?.map((router: any) => {
-      const find_token = cointype_by_chain.VARA?.[router.address]
+      const token_address = convertNativeToAddress(router.address);
+      const find_token = cointype_by_chain.VARA?.[token_address]
       return find_token
     }) || []
     const paths_length = paths_format?.length;

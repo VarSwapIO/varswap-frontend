@@ -1,20 +1,72 @@
 'use client'
 import SkeletonBG from '@/components/SkeletonBG';
 import { MAIN_COLOR } from '@/config/asset';
-import { formatNumberDisplay, formatPriceTokenDisplay } from '@/helpers/format_number_display';
+import { formatNumberDisplay, formatPriceTokenDisplay, getBaseLog } from '@/helpers/format_number_display';
+import { convertNativeToAddress } from '@/helpers/pools';
 import { TOKEN_LIST } from '@/mockData';
+import { get_list_token } from '@/services/overview.services';
+import { useAssetStore } from '@/stores/assetStore';
 import { Button, Tooltip } from '@mantine/core';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import QueryString from 'qs';
+import React, { useEffect, useState } from 'react'
 import ChartTokenDetail from './components/ChartTokenDetails';
 
 const TokenDetails = () => {
+  const { cointype_by_chain } = useAssetStore()
   const params = useParams();
-  const address = decodeURIComponent(params?.token_address?.toString() || '');
+  const address = (decodeURIComponent(params?.token_address?.toString() || ''));
+  const token_address = convertNativeToAddress(address)
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [tokenData, setTokenData] = useState(TOKEN_LIST[0])
+  const [tokenData, setTokenData] = useState<any>(undefined);
+  const [dataPrice, setDataPrice] = useState([])
+
+  useEffect(() => {
+    if (!!token_address) {
+      getDataToken()
+    }
+  }, [token_address])
+
+  const getDataToken = async () => {
+    setLoading(true)
+    const query_string = QueryString.stringify({
+      filters: {
+        address: {
+          $eq: token_address
+        }
+      },
+      pagination: {
+        page: 1,
+        pageSize: 1,
+      },
+    }, {
+      encodeValuesOnly: true,
+    });
+    const { data, error } = await get_list_token(query_string)
+    if (!error) {
+      const current_token = data?.[0]
+      const filter = cointype_by_chain?.VARA?.[current_token?.address]
+      const token_info = { ...current_token, ...filter }
+      console.log('token_info :>> ', token_info);
+      const data_chart = token_info?.price_24h_history && Array.isArray(token_info?.price_24h_history) ? token_info?.price_24h_history?.reduce((accumulator: any, currentValue: any) => {
+        const key = Object?.keys(currentValue)?.[0]
+        const obj = {
+          time: +key,
+          value: currentValue[key]
+        }
+        accumulator.push(obj)
+        return accumulator;
+
+      }, []) : []
+      console.log('data_chart :>> ', data_chart);
+      setDataPrice(data_chart)
+      setTokenData(token_info)
+      setLoading(false)
+    }
+  }
+
   return (
     <div className={`relative container max-w-7xl mx-auto px-2 py-10 min-h-[90vh]`}>
       <div className='flex gap-2 items-center'>
@@ -36,7 +88,7 @@ const TokenDetails = () => {
             <SkeletonBG width={70} height={20} />
           </> :
             <>
-              <img className='w-10 h-10 rounded-full bg-white object-cover' src={tokenData.icon} alt="token" />
+              <img className='w-10 h-10 rounded-full bg-white object-cover' src={tokenData?.icon || ''} alt="token" />
               <p className='text-2xl font-semibold dark:text-white text-slate-900'>{tokenData?.name}</p>
               <p className='text-slate-600 text-lg mt-1 dark:text-slate-400 font-semibold'>{tokenData?.symbol}</p>
             </>
@@ -65,7 +117,7 @@ const TokenDetails = () => {
           </Tooltip>}
         </div>
         <div className='relative gap-2'>
-          <ChartTokenDetail data={[]} loading={loading} />
+          <ChartTokenDetail data={dataPrice} loading={loading} />
           <div className='absolute right-0 top-0 w-1/5 pl-10 hidden md:block'>
             <Button
               component='a'
@@ -92,19 +144,19 @@ const TokenDetails = () => {
         <div className='w-full md:w-3/5 grid grid-cols-2 sm:grid-cols-4 gap-2 mt-6'>
           <div className='rounded-xl border dark:border-slate-800 border-slate-100 dark:bg-slate-900 bg-white text-xs sm:text-base py-4 px-2 xl:p-4 text-center shadow-sm space-y-2'>
             <p className='font-medium dark:text-slate-400 text-slate-600'>TVL</p>
-            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>${formatNumberDisplay(100000)}</p>}
+            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>${formatNumberDisplay(+tokenData?.tvl_usd?.toFixed(2) || 0)}</p>}
           </div>
           <div className='rounded-xl border dark:border-slate-800 border-slate-100 dark:bg-slate-900 bg-white text-xs sm:text-base py-4 px-2 xl:p-4 text-center shadow-sm space-y-2'>
             <p className='font-medium dark:text-slate-400 text-slate-600'>Volume 24h</p>
-            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>${formatNumberDisplay(5000)}</p>}
+            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>${formatNumberDisplay(+tokenData?.volume_24h_usd?.toFixed(2) || 0)}</p>}
           </div>
           <div className='rounded-xl border dark:border-slate-800 border-slate-100 dark:bg-slate-900 bg-white text-xs sm:text-base py-4 px-2 xl:p-4 text-center shadow-sm space-y-2'>
             <p className='font-medium dark:text-slate-400 text-slate-600'>Price</p>
-            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>{formatPriceTokenDisplay(1.54)}</p>}
+            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>{formatPriceTokenDisplay(tokenData?.price_usd?.toFixed(Math.floor(3 + getBaseLog(10, 1 / (tokenData?.price_usd > 1 ? 1 : tokenData?.price_usd)))) || 0)}</p>}
           </div>
           <div className='rounded-xl border dark:border-slate-800 border-slate-100 dark:bg-slate-900 bg-white text-xs sm:text-base py-4 px-2 xl:p-4 text-center shadow-sm space-y-2'>
             <p className='font-medium dark:text-slate-400 text-slate-600'>Total Volume</p>
-            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>${formatNumberDisplay(135000000)}</p>}
+            {loading ? <SkeletonBG width={70} height={20} /> : <p className='font-semibold dark:text-white text-slate-900'>${formatNumberDisplay(+tokenData?.total_volume_usd?.toFixed(2) || 0)}</p>}
           </div>
         </div>
       </div>
