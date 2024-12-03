@@ -21,7 +21,7 @@ const OverviewChartTab = () => {
         setLoading(true)
         const { data: dataDex, error: errorDex } = await get_dex_data()
         if (!errorDex) {
-            setDataOverview(dataDex?.attributes || {})
+            setDataOverview(dataDex || {})
         }
         console.log('dataDex', dataDex)
         const query_string = QueryString.stringify({
