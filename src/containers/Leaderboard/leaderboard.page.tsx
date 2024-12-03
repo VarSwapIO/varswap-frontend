@@ -2,6 +2,7 @@
 import PaginationBG from '@/components/Pagination/PaginationBG';
 import { get_list_user_trading } from '@/services/overview.services';
 import { CloseButton, Input } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import { SortingState } from '@tanstack/react-table';
 import QueryString from 'qs';
 import React, { useEffect, useState } from 'react'
@@ -17,15 +18,21 @@ const LeaderboardContainer = () => {
     id: "total_volume_usd"
   }]);
   const [searchAddress, setSearchAddress] = useState('');
+  const [searchAddressDebounce] = useDebouncedValue(searchAddress, 500)
 
   useEffect(() => {
     getDataListToken()
-  }, [currentPage, sorting])
+  }, [currentPage, sorting, searchAddressDebounce])
 
   const getDataListToken = async () => {
     setLoading(true);
     const sort_value = `${sorting?.[0]?.id}:${sorting?.[0]?.desc ? 'desc' : 'asc'}`
     const query_string = QueryString.stringify({
+      filters:{
+        address: {
+          $containsi: searchAddressDebounce
+        }
+      },
       sort: [sort_value],
       pagination: {
         page: currentPage,
