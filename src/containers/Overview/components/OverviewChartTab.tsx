@@ -23,6 +23,7 @@ const OverviewChartTab = () => {
         if (!errorDex) {
             setDataOverview(dataDex?.attributes || {})
         }
+        console.log('dataDex', dataDex)
         const query_string = QueryString.stringify({
             sort: ['date:asc'],
             pagination: {
@@ -32,13 +33,14 @@ const OverviewChartTab = () => {
         }, {
             encodeValuesOnly: true,
         });
-        const { data, error, meta } = await get_chart_data(query_string)
+        const { data, error, meta } = await get_chart_data(query_string);
+        console.log('dataget_chart_data', data)
         if (!error) {
             let data_volume_24h: Array<any> = []
             let data_tvl: Array<any> = []
             data.forEach((element: any) => {
-                data_volume_24h.push({ time: new Date(+element?.attributes?.date).toISOString(), value: element?.attributes?.volume_usd })
-                data_tvl.push({ time: new Date(+element?.attributes?.date).toISOString(), value: element?.attributes?.tvl_usd })
+                data_volume_24h.push({ time: new Date(+element?.date).toISOString(), value: element?.volume_usd })
+                data_tvl.push({ time: new Date(+element?.date).toISOString(), value: element?.tvl_usd })
             });
 
             setDataVolume24H((v24h: any) => ([...v24h, ...data_volume_24h]))

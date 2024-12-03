@@ -105,7 +105,7 @@ const OverviewTransaction = () => {
 
     if (!error) {
       console.log('data-history-swap', data)
-      const format_data = data.map((history: any) => {
+      const format_data = data?.map((history: any) => {
         const format = formatDataHistory(history)
         return format
       })

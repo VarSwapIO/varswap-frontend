@@ -42,7 +42,7 @@ const TokenContainer = ({ overview }: { overview?: boolean }) => {
     const { data, error, meta } = await get_list_token(query_string);
     console.log('dataget_list_token :>> ', data);
     if (!error) {
-      const formatData = data.map((t: any) => {
+      const formatData = data?.map((t: any) => {
 
         const filter_token = cointype_by_chain?.VARA?.[t?.address]
         console.log('data-token filter_token', filter_token)
