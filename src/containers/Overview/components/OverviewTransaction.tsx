@@ -39,11 +39,11 @@ const OverviewTransaction = () => {
           ...history,
           inputToken: {
             ...add_lp_token_in_metadata,
-            amount: BigInt(history?.events?.amount_a || history?.events?.amount_vara)?.toString()
+            amount: BigInt(history?.events?.amount_a || history?.events?.amount_vara || 0)?.toString()
           },
           outputToken: {
             ...add_lp_token_out_metadata,
-            amount: BigInt(history?.events?.amount_b || history?.events?.amount_vara)?.toString()
+            amount: BigInt(history?.events?.amount_b || history?.events?.amount_vara || 0)?.toString()
           },
           action_type: 'AddLiquidity'
         }
@@ -56,11 +56,11 @@ const OverviewTransaction = () => {
           ...history,
           inputToken: {
             ...remove_lp_token_in_metadata,
-            amount: BigInt(history?.events?.amount_a_received)?.toString()
+            amount: BigInt(history?.events?.amount_a_received || 0)?.toString()
           },
           outputToken: {
             ...remove_lp_token_out_metadata,
-            amount: BigInt(history?.events?.amount_b_received)?.toString()
+            amount: BigInt(history?.events?.amount_b_received || 0)?.toString()
           },
           action_type: 'AddLiquidity'
         }
@@ -74,11 +74,11 @@ const OverviewTransaction = () => {
           ...history,
           inputToken: {
             ...token_in_metadata,
-            amount: BigInt(history?.events?.amount_in)?.toString()
+            amount: BigInt(history?.events?.amount_in || 0)?.toString()
           },
           outputToken: {
             ...token_out_metadata,
-            amount: +BigInt(history?.events?.amount_out)?.toString()
+            amount: +BigInt(history?.events?.amount_out || 0)?.toString()
           },
           action_type: 'Swap'
         }
