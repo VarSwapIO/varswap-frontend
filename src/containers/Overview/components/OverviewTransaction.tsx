@@ -62,7 +62,7 @@ const OverviewTransaction = () => {
             ...remove_lp_token_out_metadata,
             amount: BigInt(history?.events?.amount_b_received || 0)?.toString()
           },
-          action_type: 'AddLiquidity'
+          action_type: 'RemoveLiquidity'
         }
       default:
         const paths = history?.events?.path || []
