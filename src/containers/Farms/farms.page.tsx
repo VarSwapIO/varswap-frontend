@@ -28,8 +28,8 @@ const FARM_DATA: FARM_POOL_METADATA[] = [
       decimals: 12,
       address: '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9'
     },
-    lp_stake_address: '0xd61ed73eb83e7067546baa47954cf86e8e1660ceda46bfae9156fcc4fc8bbf50',
-    farm_contract_address: '0xab8903302db6360717299cd189bc4ecd7f4b034f6e0934f191c16b0c5d0a74ef',
+    lp_stake_address: '0x59f0e2dea955bb8517e71042b22a830ec8d62cf364a9d3a3bd0df06333d81a7e',
+    farm_contract_address: '0xac921b76b1495a98404ce84d56311bf0bce4d3cb59124e983f449708ad86acaa',
     end_timestamp: '1754711364'
   }
 ]
