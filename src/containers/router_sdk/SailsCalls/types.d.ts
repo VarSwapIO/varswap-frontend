@@ -84,6 +84,7 @@ export interface SailsCommandOptions {
      * };
      */
     tokensToSend?: bigint,
+    incrementGas?:number,
     /**
      * ## Voucher id that will be used in the current message
      * If voucher id is set, it will be used for current message (HexString).

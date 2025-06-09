@@ -4,14 +4,14 @@ import { Token } from "./entities"
 export const WVARA = {
   [ChainId.TESTNET]: new Token(
     ChainId.TESTNET,
-    '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8',
+    '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40',
     12,
     'WVARA',
     'Wrapped VARA',
   ),
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    '0x8c805723ebc0a7fc5b7d3e7b75d567918e806b3461cb9fa21941a9edc0220bf',
+    '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40',
     12,
     'WVARA',
     'Wrapped VARA'),
@@ -19,14 +19,14 @@ export const WVARA = {
 export const USDC = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    '0x8c73bfc6eb50445a5543714a0c345ada1c7469dbe36a9290e7470e6ad9040fc7',
+    '0x770745e6e294f1b501dfbb1f02fd9b8330e12eaba37d6c6460c3468918875585',
     12,
     'USDC',
     'USD Coin',
   ),
   [ChainId.TESTNET]: new Token(
     ChainId.TESTNET,
-    '0x8c73bfc6eb50445a5543714a0c345ada1c7469dbe36a9290e7470e6ad9040fc7',
+    '0x770745e6e294f1b501dfbb1f02fd9b8330e12eaba37d6c6460c3468918875585',
     12,
     'USDC',
     'USD Coin',
@@ -36,14 +36,14 @@ export const USDC = {
 export const USDT = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738',
+    '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9',
     12,
     'USDT',
     'Tether USD',
   ),
   [ChainId.TESTNET]: new Token(
     ChainId.TESTNET,
-    '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738',
+    '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9',
     12,
     'USDT',
     'Tether USD',

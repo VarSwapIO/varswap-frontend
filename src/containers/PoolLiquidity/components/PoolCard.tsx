@@ -134,7 +134,7 @@ const PoolCard = ({ data: data_pool }: { data: YOUR_LIQUIDITY_METADATA }) => {
           <Button
             className='rounded-full'
             color={'red'}
-            href={`/liquidity/remove/${convertToAddressNative(data_pool?.coin_x?.address || "")}/${convertToAddressNative(data_pool?.coin_y?.address || "")}`}
+            href={`/liquidity/remove/${data_pool?.coin_x?.address || ""}/${data_pool?.coin_y?.address || ""}`}
             component={Link}
           >
             Remove

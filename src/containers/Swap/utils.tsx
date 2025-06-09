@@ -5,13 +5,15 @@ import { web3FromSource } from '@polkadot/extension-dapp';
 import JSBI from "jsbi";
 import { calculate_best_trade_exact_in, get_all_pairs, Router, send_message } from "../router_sdk";
 import { CONTRACT_DATA, LPR_IDL, NETWORK, VFT_IDL } from "../router_sdk/constants";
-import { ChainId, CurrencyAmount, Percent, Token, Vara } from "../router_sdk/core";
+import { ChainId, CurrencyAmount, Percent, Token, Vara, WVARA } from "../router_sdk/core";
 import SailsCalls from "../router_sdk/SailsCalls";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { rem } from "@mantine/core";
 import { AMOUNT_ADD_LIQUIDITY, convertNativeToAddress } from "@/helpers/pools";
 import ImageBG from "@/components/Image/ImageBG";
+import { formatAmountWithFixed } from "@/helpers/format_number_display";
+import { LIST_OF_TOKENS_BY_ADDRESS } from "@/config/tokens";
 
 type EXAC_IN_SWAP_PROPS = {
     fromToken: COIN_METADATA;
@@ -365,6 +367,7 @@ export const CreateLiquidityPair = async ({ token_a, token_b, userAddress, signe
     try {
 
         let url_command = `${CONTRACT_DATA.programId}/RouterService/CreatePair`;
+        console.log('url_command', url_command)
         let methodName = 'CreatePair'
         let args = [
             convertNativeToAddress(token_a?.address),
@@ -375,11 +378,13 @@ export const CreateLiquidityPair = async ({ token_a, token_b, userAddress, signe
         const approve_response = await send_message(url_command, {
             methodName,
             args,
-            value
+            value,
+            incrementGas: 100,
+            extraGas: 5*10**12
         }, () => {
             console.log('Message to send is loading');
         }, async () => {
-            console.log('Approve successfully!');
+            console.log('Create pair successfully!');
         }, () => {
             console.log('An error ocurred!');
         }, { userAddress, signer }, sails);
@@ -465,6 +470,8 @@ export const RemoveLiquidity = async ({ token_a, token_b, userAddress, signer, s
         },
     });
 
+    // console.log('token_a', token_a , token_b, amount_liquidity)
+
     try {
 
 
@@ -475,8 +482,8 @@ export const RemoveLiquidity = async ({ token_a, token_b, userAddress, signer, s
             token_a?.address,
             token_b?.address,
             amount_liquidity.lp_amount?.toString(),
-            amount_liquidity.token_in,
-            amount_liquidity.token_out,
+            0,// amount_liquidity.token_in,
+            0,// amount_liquidity.token_out,
             decoded_address,
             deadline
         ]
@@ -487,9 +494,9 @@ export const RemoveLiquidity = async ({ token_a, token_b, userAddress, signer, s
             methodName = `RemoveLiquidityVara`
             args = [
                 token_b?.address,
-                amount_liquidity.lp_amount,
-                amount_liquidity.token_out,
-                amount_liquidity.token_in,
+                amount_liquidity.lp_amount?.toString(),
+                0,// amount_liquidity.token_out,
+                0,// amount_liquidity.token_in,
                 decoded_address,
                 deadline
             ]
@@ -501,9 +508,9 @@ export const RemoveLiquidity = async ({ token_a, token_b, userAddress, signer, s
             methodName = `RemoveLiquidityVara`
             args = [
                 token_a?.address,
-                amount_liquidity.lp_amount,
-                amount_liquidity.token_in,
-                amount_liquidity.token_out,
+                amount_liquidity.lp_amount?.toString(),
+                0,// amount_liquidity.token_in,
+                0,// amount_liquidity.token_out,
                 decoded_address,
                 deadline
             ]
@@ -843,6 +850,148 @@ export const AddLiquidity = async ({ token_a, token_b, userAddress, signer, sail
             },
         });
         return false
+    }
+}
+
+export const WrapOrUnwrapVara = async ({ contract_id, userAddress, signer, amount, isWrap }: { contract_id: string, userAddress: any, signer: Signer, amount: string, isWrap: boolean }) => {
+    const id = notifications.show({
+        loading: true,
+        title: isWrap ? `Wrap VARA` : `Unwrap VARA`,
+        message: `Confirming use of ${amount} ${isWrap ? 'VARA' : 'WVARA'}`,
+        autoClose: false,
+        withCloseButton: false,
+        className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+        classNames: {
+            body: "dark:text-slate-300 text-slate-700 font-medium",
+            root: 'mt-2',
+            closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+            description: 'dark:text-slate-300 text-slate-700 mt-2'
+        },
+    });
+
+    const _VARA = LIST_OF_TOKENS_BY_ADDRESS['NATIVE']
+    const _WVARA = LIST_OF_TOKENS_BY_ADDRESS[WVARA[1].address]
+
+    try {
+        const amount_in_decimals = BigNumber.parseNumberWithDecimals(amount, 12) || '0'
+        const sails = await SailsCalls.new({
+            network: NETWORK,
+            idl: VFT_IDL,
+            contractId: contract_id as `0x${string}`,
+        });
+
+        let url_command = `${contract_id}/Vft/${isWrap ? 'Deposit' : 'Withdraw'}`;
+        let methodName = isWrap ? 'Deposit' : 'Withdraw'
+        let args = isWrap ? [
+        ] : [
+            amount_in_decimals
+        ]
+        let value = isWrap ? amount_in_decimals : '0'
+
+        const wrap_or_unwrap_response = await send_message(url_command, {
+            methodName,
+            args,
+            value
+        }, () => {
+            console.log('Message to send is loading');
+        }, (block) => {
+            console.log('block', block);
+        }, () => {
+            console.log('Message to send is loading');
+        }, {
+            userAddress, signer
+        }, sails);
+
+        if (!!wrap_or_unwrap_response) {
+            notifications.update({
+                id,
+                color: 'green',
+                withCloseButton: true,
+                loading: false,
+                title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
+                    <ImageBG
+                        src={isWrap ? _VARA.icon : _WVARA.icon}
+                        alt="product-logo"
+                        width={23}
+                        height={23}
+                        className="w-[23px] h-[23px] rounded-full object-cover"
+                    />
+                    <ImageBG
+                        src={isWrap ? _WVARA.icon : _VARA.icon}
+                        alt="product-logo"
+                        width={23}
+                        height={23}
+                        className="-ml-4 w-[23px] h-[23px] rounded-full object-cover"
+                    />
+                    <p className='text-white font-semibold'>{isWrap ? _VARA.symbol : _WVARA.symbol} - {isWrap ? _WVARA.symbol : _VARA.symbol}</p>
+                </div>,
+                message: <p className='text-sm text-green-500 line-clamp-1'>{`${isWrap ? 'Wrap' : 'Unwrap'} VARA successful`}</p>,
+                icon: <IconCheck style={{ width: rem(18), height: rem(18) }} />,
+                autoClose: 5000,
+                className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+                classNames: {
+                    body: "dark:text-slate-300 text-slate-700 font-medium",
+                    root: 'mt-2',
+                    closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+                    description: 'dark:text-slate-300 text-slate-700 mt-2'
+                },
+            });
+            return true;
+        } else {
+            notifications.update({
+                id,
+                color: 'red',
+                withCloseButton: true,
+                loading: false,
+                title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
+                    <ImageBG
+                        src={isWrap ? _VARA.icon : _WVARA.icon}
+                        alt="product-logo"
+                        width={23}
+                        height={23}
+                        className="w-[23px] h-[23px] rounded-full object-cover"
+                    />
+                    <p className='text-white font-semibold'>{isWrap ? _VARA.symbol : _WVARA.symbol} - {isWrap ? _WVARA.symbol : _VARA.symbol}</p>
+                </div>,
+                message: <p className='text-sm text-red-500 line-clamp-1'>{`An error occurred please try again!`}</p>,
+                icon: <IconX style={{ width: rem(18), height: rem(18) }} />,
+                autoClose: 5000,
+                className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+                classNames: {
+                    body: "dark:text-slate-300 text-slate-700 font-medium",
+                    root: 'mt-2',
+                    closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+                    description: 'dark:text-slate-300 text-slate-700 mt-2'
+                },
+            });
+            return false;
+        }
+    } catch (error) {
+        notifications.update({
+            id,
+            color: 'red',
+            title: <div className='flex gap-2 items-center font-semibold dark:text-white text-slate-900'>
+                <ImageBG
+                    src={isWrap ? _VARA.icon : _WVARA.icon}
+                    alt="product-logo"
+                    width={23}
+                    height={23}
+                    className="w-[23px] h-[23px] rounded-full object-cover"
+                />
+                <p className='text-white font-semibold'>{isWrap ? _VARA.symbol : _WVARA.symbol} - {isWrap ? _WVARA.symbol : _VARA.symbol}</p>
+            </div>,
+            message: <p className='text-sm text-red-500 line-clamp-1'>{error?.toString() || `An error occurred please try again!`}</p>,
+            icon: <IconX style={{ width: rem(18), height: rem(18) }} />,
+            autoClose: 5000,
+            className: 'dark:bg-slate-800 bg-white shadow-md rounded-xl',
+            classNames: {
+                body: "dark:text-slate-300 text-slate-700 font-medium",
+                root: 'mt-2',
+                closeButton: 'dark:hover:bg-slate-700 absolute right-2 top-2',
+                description: 'dark:text-slate-300 text-slate-700 mt-2'
+            },
+        });
+        return false;
     }
 }
 

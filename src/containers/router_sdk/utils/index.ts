@@ -102,6 +102,7 @@ export const send_message = async (url_command: string, payload: any, onload: ()
         keyPair,
         {
             tokensToSend: BigInt(payload.value),
+            incrementGas: payload.incrementGas || 30,
             callArguments: [
                 ...payload.args
             ],

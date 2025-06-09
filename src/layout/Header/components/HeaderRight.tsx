@@ -6,19 +6,44 @@ import { NAVIGATIONS } from '@/layout/navigation'
 import { Burger, Button, Divider, Drawer, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import SwitchMode from './SwitchMode'
 import UserAuthHeader from './UserAuthHeader'
+import WrapUnwrapModal from './WrapUnwrapModal'
 
 const HeaderRight = () => {
   const { connected } = useConnectWallet()
   const [opened, { toggle, close }] = useDisclosure();
+  const [modalOpened, setModalOpened] = useState(false)
   return (
     <>
       <div className='flex justify-center items-center gap-2'>
         {!connected ? <div className='flex items-center gap-1'>
           <ButtonConnectWallet />
-        </div> : <UserAuthHeader />}
+        </div> : 
+        <div className='flex items-center gap-2'>
+          <UserAuthHeader />
+          <Button
+            size="xs"
+            radius="xl"
+            className="font-semibold cursor-pointer  border-slate-200/60 dark:border-slate-700 shadow-sm dark:bg-slate-900/80 p-1 rounded-full px-2 flex items-center gap-2"
+            onClick={() => setModalOpened(true)}
+          >
+            <span className="font-semibold text-white">Wrap/Unwrap Vara</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M7.293 17.293a1 1 0 0 0 1.414 1.414l3-3a1 1 0 0 0 0-1.414l-3-3a1 1 0 1 0-1.414 1.414L8.586 14H4a1 1 0 1 0 0 2h4.586l-1.293 1.293zm9.414-10.586a1 1 0 0 0-1.414-1.414l-3 3a1 1 0 0 0 0 1.414l3 3a1 1 0 1 0 1.414-1.414L15.414 10H20a1 1 0 1 0 0-2h-4.586l1.293-1.293z"
+              />
+            </svg>
+          </Button>
+        </div>}
         <div className='lg:block hidden'>
           <SwitchMode />
         </div>
@@ -106,6 +131,7 @@ const HeaderRight = () => {
           </div>
         </Drawer>
       </div>
+      <WrapUnwrapModal opened={modalOpened} onClose={() => setModalOpened(false)} />
     </>
   )
 }

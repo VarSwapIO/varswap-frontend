@@ -16,7 +16,7 @@ import { toast } from 'react-toastify'
 import { DepositFarmLP, WithdrawFarmLP } from '../utils'
 import { getBalanceLP } from '@/services/token.services'
 
-const ACC_MOVE_PRECISION: number = 1000000000000;
+const ACC_MOVE_PRECISION: number = 10000;
 
 const calc_reward = (data_pool: any) => {
   let x_reward: number = 0;

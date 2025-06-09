@@ -32,26 +32,26 @@ const init_state: AssetStateProps = {
         decimals: 12,
         address: 'NATIVE'
       },
-      "0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8": {
+      "0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40": {
         icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
         symbol: 'WVARA',
         name: 'WVara Network',
         decimals: 12,
-        address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
+        address: '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40'
       },
-      "0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738": {
+      "0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9": {
         icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
         symbol: 'USDT',
         name: 'USDT',
         decimals: 12,
-        address: '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738'
+        address: '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9'
       },
-      "0x8c73bfc6eb50445a5543714a0c345ada1c7469dbe36a9290e7470e6ad9040fc7": {
-        icon: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
+      "0x770745e6e294f1b501dfbb1f02fd9b8330e12eaba37d6c6460c3468918875585": {
+        icon: 'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-usd-coin-usdc-digital-stablecoin-icon-technology-pay-web-vector-png-image_37843734.png',
         symbol: 'USDC',
         name: 'USDC',
         decimals: 12,
-        address: '0x8c73bfc6eb50445a5543714a0c345ada1c7469dbe36a9290e7470e6ad9040fc7'
+        address: '0x770745e6e294f1b501dfbb1f02fd9b8330e12eaba37d6c6460c3468918875585'
       },
     },
   },
@@ -86,12 +86,12 @@ export const useAssetStore = create<AssetState>()(
               ...state.cointype_by_chain,
               [chain]: {
                 ...data_to_obj,
-                "0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8": {
+                "0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40": {
                   icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
                   symbol: 'WVARA',
                   name: 'WVara Network',
                   decimals: 12,
-                  address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
+                  address: '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40'
                 },
               }
             }

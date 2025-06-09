@@ -131,7 +131,8 @@ const parseNumberWithDecimals = (a_input: InputBignumber, decimals = 12) => {
 	if (!a_input) {
 		return null
 	}
-	const a = parseFloatToInt(a_input)
+	const cleaned_input = typeof a_input === 'string' ? a_input.replace(/,/g, '') : a_input
+	const a = parseFloatToInt(cleaned_input)
 	const bn_a = JSBI.BigInt(a?.num)
 	const num_with_decimal = exponentiate(
 		JSBI.BigInt(10),

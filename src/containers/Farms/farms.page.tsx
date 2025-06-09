@@ -12,7 +12,7 @@ const FARM_DATA: FARM_POOL_METADATA[] = [
       symbol: 'USDT',
       name: 'USDT',
       decimals: 12,
-      address: '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738'
+      address: '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9'
     },
     token_y: {
       icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28067.png',
@@ -26,11 +26,11 @@ const FARM_DATA: FARM_POOL_METADATA[] = [
       symbol: 'USDT',
       name: 'USDT',
       decimals: 12,
-      address: '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738'
+      address: '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9'
     },
-    lp_stake_address: '0x3e58bb732341063cc7869636f84d6fac4524524f1c82dd6da0cb7a1711fd5aa4',
-    farm_contract_address: '0x9f32ddcbf4bdf6cfc135d31ca906f93323e93a5c4d88b46939d7ff145ffff0c1',
-    end_timestamp: '1735465248'
+    lp_stake_address: '0xd61ed73eb83e7067546baa47954cf86e8e1660ceda46bfae9156fcc4fc8bbf50',
+    farm_contract_address: '0xab8903302db6360717299cd189bc4ecd7f4b034f6e0934f191c16b0c5d0a74ef',
+    end_timestamp: '1754711364'
   }
 ]
 

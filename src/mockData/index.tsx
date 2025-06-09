@@ -4,7 +4,7 @@ export const YOUR_LIQUIDITY_MOCKDATA: YOUR_LIQUIDITY = {
     symbol: 'VARA',
     name: 'Vara Network',
     decimals: 12,
-    address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
+    address: '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40'
   },
   coin_x_amount: 1000000000000000,
   coin_y: {
@@ -32,7 +32,7 @@ export const TOKEN_LIST: TOKEN_METADATA[] = [
     symbol: 'WVARA',
     name: 'WVara',
     decimals: 12,
-    address: '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8'
+    address: '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40'
   },
   {
     icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
@@ -42,16 +42,16 @@ export const TOKEN_LIST: TOKEN_METADATA[] = [
     address: '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738'
   },
   {
-    icon: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
+    icon: 'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-usd-coin-usdc-digital-stablecoin-icon-technology-pay-web-vector-png-image_37843734.png',
     symbol: 'USDC',
     name: 'USDC',
     decimals: 12,
-    address: '0x8c73bfc6eb50445a5543714a0c345ada1c7469dbe36a9290e7470e6ad9040fc7'
+    address: '0x770745e6e294f1b501dfbb1f02fd9b8330e12eaba37d6c6460c3468918875585'
   },
 ]
 
 export const BALANCE_TOKEN: { [key: string]: any } = {
-  '0x0902f92a4ba0747e0a379a67c4c5178a8d833bdb5727932e1310a20b8a049af8': {
+  '0xe881ae415d30e7651ad557c7a036b88efa88f5603796c89a3ea612122e73ac40': {
     totalBalance: 1000000000000000
   },
   '0xabe4ef22dfe18d325d28c400757cb9f713fe5152b6ce5cff71870c1b885c8738': {

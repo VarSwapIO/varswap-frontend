@@ -128,9 +128,9 @@ export const WithdrawFarmLP = async ({ token_a, token_b, farm_pool_info, withdra
 
   try {
 
-    let url_command = `${farm_pool_info?.farm_contract_address}/LpStakingService/Withdraw`;
-    let methodName = 'Withdraw'
-    let args = [
+    let url_command = `${farm_pool_info?.farm_contract_address}/LpStakingService/${is_harvest ? 'ClaimReward' : 'Withdraw'}`;
+    let methodName = is_harvest ? 'ClaimReward' : 'Withdraw'
+    let args = is_harvest ? [] : [
       withdraw_amount
     ]
     let value = '0'

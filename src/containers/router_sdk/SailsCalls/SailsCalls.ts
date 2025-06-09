@@ -576,14 +576,16 @@ export class SailsCalls {
                 callArguments, 
                 callbacks, 
                 tokensToSend,
-                voucherId
+                voucherId,
+                incrementGas,
             } = options 
                 ? options 
                 : { 
                     callArguments: undefined, 
                     callbacks: undefined,
                     tokensToSend: undefined,
-                    voucherId: undefined
+                    voucherId: undefined,
+                    incrementGas: 30,
                   };
 
             const [
@@ -640,8 +642,7 @@ export class SailsCalls {
             }
 
             try {
-                await transaction.calculateGas(false, 10);
-
+                await transaction.calculateGas(true, incrementGas);
                 const { blockHash, response } = await transaction.signAndSend();
 
                 console.log(`blockhash: ${blockHash}`);

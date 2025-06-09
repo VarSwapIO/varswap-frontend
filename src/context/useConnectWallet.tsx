@@ -72,13 +72,13 @@ export default function ConnectWalletProvider({
 
   useEffect(() => {
     getAllBalance()
-  }, [balance, accountConnected?.address])
+  }, [balance, accountConnected?.address, cointype_by_chain])
 
 
   const getAllBalance = async () => {
     if (!accountConnected?.address_decoded) return;
     const formattedBalance = balance ? getFormattedBalance(balance) : { value: 0, unit: 'VARA' };
-    console.log('balance', balance)
+    console.log('balance', formattedBalance)
     const balance_default: { [key: string]: any } = {
       "NATIVE": {
         ...LIST_OF_TOKENS_BY_ADDRESS["NATIVE"],
