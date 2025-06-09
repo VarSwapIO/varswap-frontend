@@ -9,7 +9,11 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import SwitchMode from './SwitchMode'
 import UserAuthHeader from './UserAuthHeader'
-import WrapUnwrapModal from './WrapUnwrapModal'
+import dynamic from 'next/dynamic'
+
+const WrapUnwrapModal = dynamic(() => import('./WrapUnwrapModal'), {
+  loading: () => <p>Loading...</p>,
+})
 
 const HeaderRight = () => {
   const { connected } = useConnectWallet()
