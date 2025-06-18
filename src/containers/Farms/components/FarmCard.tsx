@@ -343,7 +343,7 @@ const FarmCard = ({ data }: { data: FARM_POOL_METADATA }) => {
                       </Tooltip>
                       Core
                     </div>
-                    <p className='rounded-xl text-white font-bold bg-mainColor w-fit text-xs p-2'>{'10X' || '1X'}</p>
+                    <p className='rounded-xl text-white font-bold bg-mainColor w-fit text-xs p-2'>{'10X'.toString() || '1X'}</p>
                   </div>
                 </div>
               </div>
