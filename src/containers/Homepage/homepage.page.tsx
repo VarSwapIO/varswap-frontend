@@ -230,7 +230,7 @@ const HomepageContainer = () => {
                 <p className="text-sm sm:text-base px-6 mb-5 mt-3 lg:min-h-[90px] font-medium dark:text-slate-300 text-slate-600">
                   Provide liquidity to pools on Varswap and earn fees on swaps.
                 </p>
-                <a href="/pool" className="text-base text-blue-500 px-6 mb-5 font-semibold mt-auto">
+                <a href="/pools" className="text-base text-blue-500 px-6 mb-5 font-semibold mt-auto">
                   Provide liquidity
                 </a>
               </div>
@@ -246,7 +246,7 @@ const HomepageContainer = () => {
                 <p className="text-sm sm:text-base px-6 mb-5 mt-3 lg:min-h-[90px]">
                   Stake token to gain access to receive platform fees, and more benefits..
                 </p>
-                <a href="#" target="_blank" rel="noopener noreferrer" className="text-base text-blue-500 px-6 mb-5 mt-3 font-semibold">
+                <a href="/farms" target="_blank" rel="noopener noreferrer" className="text-base text-blue-500 px-6 mb-5 mt-3 font-semibold">
                   Stake now
                 </a>
               </div>

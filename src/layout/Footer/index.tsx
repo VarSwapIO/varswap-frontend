@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <div className=" bg-white dark:bg-slate-900 relative w-full">
       <div className="w-full h-full sm:h-[45px] px-4 sm:pt-0 pt-2 pb-2 sm:pb-0 text-xs font-semibold flex sm:flex-row flex-col-reverse gap-2 justify-between items-center sm:gap-6 border-solid border-x-0 border-b-0 border-t-[1px] border-gray-200 dark:border-gray-700">
-        © 2024 VarSwap. All rights reserved.
+        © {new Date().getFullYear()} VarSwap. All rights reserved.
         <div className="flex gap-2 items-center" >
           <BlankLink>Terms of Service</BlankLink>
           <p>|</p>
@@ -44,7 +44,7 @@ const Footer = () => {
                 priority
               />
             </BlankLink>
-            <BlankLink link="#">
+            {/* <BlankLink link="#">
               {" "}
               <ImageBG
                 src="/images/icons/facebook.svg"
@@ -53,7 +53,7 @@ const Footer = () => {
                 height={22}
                 priority
               />
-            </BlankLink>
+            </BlankLink> */}
           </div>
         </div>
       </div>

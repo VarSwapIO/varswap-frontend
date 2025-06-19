@@ -76,22 +76,24 @@ const ModalConfirmSwap: FC<ModalConfirmSwapProps> = ({ show, onClick, onClose, d
           <p>{slippage}%</p>
         </div>
         <p className="text-sm px-1 mt-2 font-semibold dark:text-white">Output is estimated. You will receive at least <span className="text-green-400 font-semibold">{formatAmountWithFixed(data_trade?.minimum_received || 0)} {token_swap?.token_out?.symbol}</span> or the transaction will revert.</p>
-        {+data_trade?.price_impact > 20 && <div className="px-1 mt-1">
-          <p className="text-red-500 text-xs font-semibold mb-2">{'Price impact is too high. Please enter "Confirm" to confirm want to swap'}</p>
-          <Input
-            size={'sm'}
-            variant="filled"
-            radius="xl"
-            className='md:block hidden'
-            classNames={{
-              input: `dark:bg-slate-700 bg-slate-100 font-semibold text-white`,
-              wrapper: ``
-            }}
-            placeholder="Confirm"
-            value={confirmText}
-            onChange={(e: any) => setConfirmText(e?.target?.value)}
-          />
-        </div>}
+        {+data_trade?.price_impact > 20 && (
+          <div className="px-1 mt-1">
+            <p className="text-red-500 text-xs font-semibold mb-2">{'Price impact is too high. Please enter "Confirm" to confirm want to swap'}</p>
+            <Input
+              size={'sm'}
+              variant="filled"
+              radius="xl"
+              className="block w-full p-2"
+              classNames={{
+                input: `dark:bg-slate-700 bg-slate-100 font-semibold text-white`,
+                wrapper: ``
+              }}
+              placeholder="Confirm"
+              value={confirmText}
+              onChange={(e: any) => setConfirmText(e?.target?.value)}
+            />
+          </div>
+        )}
         <div className="space-y-1.5 text-txt-200 dark:text-white">
           <div className="flex justify-between items-center text-sm font-semibold px-1 pt-4 border-t dark:border-slate-700 border-slate-100 mt-4">
             <p>Price</p>
