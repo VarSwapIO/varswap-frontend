@@ -75,9 +75,12 @@ const HeaderSearch = () => {
       const { data: data_token, error: errorToken } = await get_list_token(query_string)
       console.log('data-search', data_token)
 
-      if (data_token?.length === 0) return;
+      if (!Array.isArray(data_token) || data_token.length === 0) {
+        setDataSearch([])
+        return;
+      }
 
-      const format_data_token = data_token?.map((x: any) => {
+      const format_data_token = data_token.map((x: any) => {
         return {
           name: x?.name,
           symbol: x?.symbol,

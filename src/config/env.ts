@@ -1,6 +1,6 @@
 export const ENV_VARSWAP = {
-  FACTORY_ADDRESS: '0x1d1a95955a785b5e0bfebacb379e930523a17519ddcaba7862daf084f9c8a4d3',
-  ROUTER_ADDRESS: '0x5fd93a83e22fff774d5c2c3c65be40a8df7aea854baa3b2560123da0c9f508af',
+  FACTORY_ADDRESS: '0xa911dae6bc9f39837b147077bd351d6f5d1304fc549162e908a3b2335e3ca923',
+  ROUTER_ADDRESS: '0x210a12b0bd731a24cb3b4d16a58cf6e88f6f7db86906ff72ab190d6d73609d44',
   NETWORK: 'wss://testnet-archive.vara.network',
   API_URL: 'https://api.varswap.io/api'
 }

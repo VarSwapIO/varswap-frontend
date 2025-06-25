@@ -1,4 +1,4 @@
-import ImageBG from '@/components/Image/ImageBG';
+import Image from 'next/image';
 import { MAIN_COLOR } from '@/config/asset';
 import { formatPriceTokenDisplay } from '@/helpers/format_number_display';
 import { convertToAddressNative } from '@/helpers/pools';
@@ -9,17 +9,22 @@ import React from 'react'
 
 
 const CoinLine = ({ coin }: { coin: COIN_METADATA }) => {
+  if (!coin) return null;
   const change_price = percentBetweenTwoValue(+(coin?.old_24h_price_usd || 0), +(coin?.price_usd || 0));
   return (
     <div className='flex justify-between items-center p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl'>
       <p className='flex gap-2 items-center '>
-        <ImageBG
-          src={coin.icon}
-          className="w-10 h-10 rounded-full bg-white"
-          alt="coin-img"
-          height={40}
-          width={40}
-        />
+        {coin.icon ? (
+          <Image
+            src={coin.icon}
+            className="w-10 h-10 rounded-full bg-white"
+            alt="coin-img"
+            height={40}
+            width={40}
+          />
+        ) : (
+          <div className="w-10 h-10 rounded-full bg-gray-200" />
+        )}
         <Link href={`/token/${convertToAddressNative(coin.address)}`}
           className="flex flex-col items-start">
           <div className='flex items-center gap-2'>
