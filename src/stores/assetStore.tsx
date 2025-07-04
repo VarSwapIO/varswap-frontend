@@ -53,26 +53,26 @@ const init_state: AssetStateProps = {
         decimals: 12,
         address: '0x770745e6e294f1b501dfbb1f02fd9b8330e12eaba37d6c6460c3468918875585'
       },
-      "0xb78e078fa0947e4e3a21f0edf7104f7208119d547cc91dc28dbc0d80cc072c0c": {
+      "0x46896891852a364d9fe38b52e4061da85a00f6118415715c40d86a1f4ca00414": {
         icon: 'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-usd-coin-usdc-digital-stablecoin-icon-technology-pay-web-vector-png-image_37843734.png',
         symbol: 'WUSDC',
         name: 'Wrapped USDC',
-        decimals: 18,
-        address: '0xb78e078fa0947e4e3a21f0edf7104f7208119d547cc91dc28dbc0d80cc072c0c'
+        decimals: 6,
+        address: '0x46896891852a364d9fe38b52e4061da85a00f6118415715c40d86a1f4ca00414'
       },
-      "0x2156679a6147013e5217fa3b8210d0ce4986c54aaffcfa70c4a171c7a8b6afd9": {
+      "0x77e704ac1c6129d147ecc6b5ddadc80dd1945505bb9654b23e41153ed0737e49": {
         icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
         symbol: 'WUSDT',
         name: 'Wrapped USDT',
-        decimals: 18,
-        address: '0x2156679a6147013e5217fa3b8210d0ce4986c54aaffcfa70c4a171c7a8b6afd9'
+        decimals: 6,
+        address: '0x77e704ac1c6129d147ecc6b5ddadc80dd1945505bb9654b23e41153ed0737e49'
       },
-      "0xaa6bc2ad1b660f6e7aaf3cb3418e6f66fe8c78f55400051b1d8bef0483976a42": {
+      "0x1f2af47fa11e08e9a7e9bf81d84d166e425e1f13104690b33f4fd4c4ddca6709": {
         icon: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
         symbol: 'WETH',
         name: 'Wrapped ETH',
         decimals: 18,
-        address: '0xaa6bc2ad1b660f6e7aaf3cb3418e6f66fe8c78f55400051b1d8bef0483976a42'
+        address: '0x1f2af47fa11e08e9a7e9bf81d84d166e425e1f13104690b33f4fd4c4ddca6709'
       },
     },
   },
