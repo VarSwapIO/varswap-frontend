@@ -39,6 +39,7 @@ const InputToken = ({ value, onChange, onChangeToken, token, disable, loading, d
             disableSelectToken={disableSelectToken}
             token={token}
             onChangeToken={(token: COIN_METADATA) => onChangeToken && onChangeToken(token)}
+            isOutput={hiddenMaxBtn}
           />
         </div>
         <div className="w-full relative">

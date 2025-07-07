@@ -8,9 +8,10 @@ interface InputSelectToken {
   token?: COIN_METADATA;
   disable?: boolean;
   disableSelectToken?: boolean;
+  isOutput?: boolean; 
 }
 
-const SelectToken = ({ onChangeToken, token, disableSelectToken }: InputSelectToken) => {
+const SelectToken = ({ onChangeToken, token, disableSelectToken, isOutput }: InputSelectToken) => {
   const [modalSelectToken, setModalSelectToken] = useState(false)
   return (
     <>
@@ -46,6 +47,7 @@ const SelectToken = ({ onChangeToken, token, disableSelectToken }: InputSelectTo
           setModalSelectToken(false);
         }}
         onClose={() => setModalSelectToken(false)}
+        isOutput={isOutput} 
       />
     </>
   )

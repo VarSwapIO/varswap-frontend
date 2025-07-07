@@ -28,9 +28,9 @@ const FARM_DATA: FARM_POOL_METADATA[] = [
       decimals: 12,
       address: '0x3efbbfe9657b8d733a031a35902f6806279c4452d79de55ab9d6c164af2126e9'
     },
-    lp_stake_address: '0x59f0e2dea955bb8517e71042b22a830ec8d62cf364a9d3a3bd0df06333d81a7e',
-    farm_contract_address: '0xac921b76b1495a98404ce84d56311bf0bce4d3cb59124e983f449708ad86acaa',
-    end_timestamp: '1754711364'
+    lp_stake_address: '0x1161657c337bad5c6c03f98d91207f048ac96c257cfded4fda236ab0c65ef24a',
+    farm_contract_address: '0x05fab3cbc600d3310e7e7e43ce2e16757422da0b4bfe668e82f82512f276bf07',
+    end_timestamp: '1757215461'
   }
 ]
 

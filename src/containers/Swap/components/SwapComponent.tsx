@@ -373,7 +373,7 @@ const SwapComponentImp = () => {
               onChange={(value: string | number) => onTypingValue(value?.toString(), Field.OUTPUT)}
               value={independent_field === Field.OUTPUT ? typed_value : resultSwapCal?.amount_out_formatted}
               token={token_swap[Field.OUTPUT]}
-              hiddenMaxBtn={true}
+              hiddenMaxBtn={true} 
               loading={loadingResult}
               disable={true}
             />

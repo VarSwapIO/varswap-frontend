@@ -14,9 +14,10 @@ export interface ModalTokenSelectProps {
   onClick: (token: any) => void;
   onClose: () => void;
   tokenSelected?: any;
+  isOutput?: boolean; 
 }
 
-const ModalTokenSelect: FC<ModalTokenSelectProps> = ({ show, onClick, onClose, tokenSelected }) => {
+const ModalTokenSelect: FC<ModalTokenSelectProps> = ({ show, onClick, onClose, tokenSelected, isOutput }) => {
   const { cointype_by_chain_arr, updateCoinTypeByChain } = useAssetStore();
   const { balances } = useConnectWallet();
 
@@ -26,28 +27,37 @@ const ModalTokenSelect: FC<ModalTokenSelectProps> = ({ show, onClick, onClose, t
 
   useEffect(() => {
     if (!show) {
-      if (cointype_by_chain_arr?.['VARA']?.length > 0) {
-        setListToken(cointype_by_chain_arr?.['VARA'])
+      let tokens = cointype_by_chain_arr?.['VARA'] || [];
+      if (isOutput) {
+        tokens = tokens.filter((token: any) => token.symbol !== 'VARA' && token.symbol !== 'TVARA');
+      }
+      if (tokens.length > 0) {
+        setListToken(tokens)
       }
     }
-  }, [show, cointype_by_chain_arr]);
+  }, [show, cointype_by_chain_arr, isOutput]);
 
 
   const handleSearchToken = async (e: any) => {
     const name = e.target.value?.trim();
     const name_lowcase = name?.toLowerCase();
     if (!name) {
-      const list_token = cointype_by_chain_arr.VARA
+      let list_token = cointype_by_chain_arr.VARA || [];
+      if (isOutput) {
+        list_token = list_token.filter((token: any) => token.symbol !== 'VARA' && token.symbol !== 'TVARA');
+      }
       setListToken(list_token || [])
     } else {
-      const token_filter = cointype_by_chain_arr?.VARA?.filter((x: COIN_METADATA) => {
+      let token_filter = cointype_by_chain_arr?.VARA?.filter((x: COIN_METADATA) => {
         if (x?.address?.includes(name) || x?.name?.toLowerCase()?.includes(name_lowcase) || x?.symbol?.includes(name_lowcase)) {
           return true;
         } else {
           return false
         }
-      })
-
+      }) || [];
+      if (isOutput) {
+        token_filter = token_filter.filter((token: any) => token.symbol !== 'VARA' && token.symbol !== 'TVARA');
+      }
       if (name?.length >= 64 && name?.length <= 66) {
         setLoadingCheckToken(true)
         try {
@@ -63,7 +73,12 @@ const ModalTokenSelect: FC<ModalTokenSelectProps> = ({ show, onClick, onClose, t
               verified: false,
               is_new: true
             }
-            setListToken([obj]);
+            
+            if (isOutput && (obj.symbol === 'VARA' || obj.symbol === 'TVARA')) {
+              setListToken([]);
+            } else {
+              setListToken([obj]);
+            }
           }
         } catch (error) {
           setListToken([]);
